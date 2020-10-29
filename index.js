@@ -7,20 +7,18 @@ const bodyParser = require('body-parser')
 
 const app = new express()
 
+app.set('port', 4000)
+
 app.use(express.static('public'))
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars')
 
-
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 
-
-
 app.get('/', (req,res) => {
-
-  res.render('index');
+  res.render('index')
 })
 
 app.get('/recipes', (req,res) => {
@@ -39,7 +37,7 @@ app.get('/ingredients', (req,res) => {
   res.render('ingredients')  
 })
 
-app.listen(4000, () => {
-  console.log('App listenign on port 4000')
+app.listen(app.get('port'), () => {
+  console.log('App running and accessible at http://localhost:' + app.get('port'))
 })
 
