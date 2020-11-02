@@ -1,5 +1,86 @@
-<div class="container">
-	<div class="row">
-		<h1>This is the diets page</h1>
-	</div>
-</div>
+<main class="container">
+    <div class="row">
+        <h1>Add or Edit Your <em>Diets</em></h1>
+        <div id="item_form">
+            <section>
+                <h2>Edit Diets</h2>
+                <!-- TODO: Import diets from context object. -->
+                <ul>
+                    {{#each item}}
+                        <li>
+                            <form action="/diets">
+                                <input type="hidden" value="{{this.id}}" name="item">
+                                <input type="text" value="{{this.name}}" class="editable_input" disabled>
+                                <div>
+                                    <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
+                                    <!-- This button connects to a PUT request -->
+                                    <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
+                                </div>
+                                <div>
+                                    <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm">
+                                    <!-- This button connects to a DELETE request -->
+                                    <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
+                                </div>
+                            </form>
+                        </li>
+                    {{/each}}
+                    <!-- TODO: Remove the following 3 examples once the server is connected. -->
+                    <li>
+                        <form action="/diets">
+                            <input type="hidden" value="item1_id" name="item">
+                            <input type="text" value="Item 1" class="editable_input" disabled>
+                            <div>
+                                <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
+                                <!-- This button connects to a PUT request -->
+                                <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
+                            </div>
+                            <div>
+                                <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm">
+                                <!-- This button connects to a DELETE request -->
+                                <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
+                            </div>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/diets">
+                            <input type="hidden" value="item2_id" name="item">
+                            <input type="text" disabled value="Item 2" class="editable_input">
+                            <div>
+                                <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
+                                <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
+                            </div>
+                            <div>
+                                <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-success btn-sm">
+                                <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
+                            </div>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/diets">
+                            <input type="hidden" value="item3_id" name="item">
+                            <input type="text" disabled value="Item 3" class="editable_input">
+                            <div>
+                                <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
+                                <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
+                            </div>
+                            <div>
+                                <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-success btn-sm">
+                                <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
+                            </div>
+                        </form>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h2>Add Diets</h2>
+                <!-- Text box for entering the name of an ingredient -->
+                <form action="/diets" method="POST">
+                    <label for="add_item">Ingredient: </label>
+                    <input type="text" name="add_item" id="add_item" />
+                    <!-- This button connects to a POST request -->
+                    <input type="image" src="img/plus.png" class="add_item btn btn-success btn-sm">
+                </form>
+            </section>
+        </div>
+    </div>
+</main>
