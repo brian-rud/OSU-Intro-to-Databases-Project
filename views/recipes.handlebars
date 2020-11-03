@@ -1,5 +1,115 @@
-<div class="container">
+<main class="container">
 	<div class="row">
-		<h1>This is the recipes page</h1>
+		<h1>Add or Edit Your <em>Recipes</em></h1>
+        <div id="item_form">
+            <section>
+                <h2>Edit Recipes</h2>
+                <!-- TODO: Import Recipes from context object. -->
+                <ul>
+                    {{#each item}}
+                        <li>
+                            <form action="/recipes">
+                                <input type="hidden" value="{{this.id}}" name="item">
+                                <input type="text" value="{{this.name}}" class="editable_input" disabled>
+                                <div>
+                                    <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
+                                    <!-- This button connects to a PUT request -->
+                                    <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
+                                </div>
+                                <div>
+                                    <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm">
+                                    <!-- This button connects to a DELETE request -->
+                                    <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
+                                </div>
+                            </form>
+                        </li>
+                    {{/each}}
+                    <!-- TODO: Remove the following 3 examples once the server is connected. -->
+                    <li>
+                        <form action="/recipes">
+                            <input type="hidden" value="recipe1_id" name="item">
+                            <input type="text" value="Recipe 1" class="editable_input" disabled>
+                            <div>
+                                <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
+                                <!-- This button connects to a PUT request -->
+                                <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
+                            </div>
+                            <div>
+                                <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm">
+                                <!-- This button connects to a DELETE request -->
+                                <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
+                            </div>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/recipes">
+                            <input type="hidden" value="recipe2_id" name="item">
+                            <input type="text" disabled value="Recipe 2" class="editable_input">
+                            <div>
+                                <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
+                                <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
+                            </div>
+                            <div>
+                                <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-success btn-sm">
+                                <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
+                            </div>
+                        </form>
+                    </li>
+                    <li>
+                        <form action="/recipes">
+                            <input type="hidden" value="recipe3_id" name="item">
+                            <input type="text" disabled value="Recipe 3" class="editable_input">
+                            <div>
+                                <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
+                                <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
+                            </div>
+                            <div>
+                                <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-success btn-sm">
+                                <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
+                            </div>
+                        </form>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h2>Add Recipes</h2>
+                <!-- Text box for entering the name of an ingredient -->
+                <form action="/recipes" method="POST">
+                	<div class="form-group">
+	                    <label for="recipeUrl">Link:</label>
+	                    <input type="text" class="form-control" name="recipeUrl" id="recipeUrl">
+	                </div>
+	                <div class="form-group">    
+	                    <label for="name">Name:</label>
+	                    <input type="text" class="form-control" name="name" id="name">
+	                </div>
+	                <div class="form-group">    
+	                    <label for="description">Description:</label>
+	                    <input type="text" class="form-control" name="description" id="description">
+	                </div>
+	                <div class="form-group">    
+	                    <label for="cuisine">Cuisine:</label>
+	                    <input type="text" class="form-control" name="cuisine" id="cuisine">
+	                </div>
+	                <div class="form-group">    
+	                    <label for="diet">Diet:</label>
+	                    <input type="text" class="form-control" name="diet" id="diet">
+	                </div>
+	                <div class="form-group">    
+	                    <label for="meal">Meal:</label>
+	                    <select class="form-control" name="meal" id="meal">
+	                    	<option>Breakfast</option>
+	                    	<option>Lunch</option>
+	                    	<option>Dinner</option>
+	                    	<option>Snack</option>
+	                    	<option>Dessert</option>
+	                    </select>
+	                </div>
+
+                    <!-- This button connects to a POST request -->
+                    <input type="image" src="img/plus.png" class="add_item btn btn-success btn-sm">
+                </form>
+            </section>
+        </div>
 	</div>
-</div>
+</main>
