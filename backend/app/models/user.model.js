@@ -42,7 +42,7 @@ User.fetchAll = result => {
 	sql.query("SELECT * from users", (err, res) => {
 		if (err){
 			console.log("Error: ", err);
-			result(null, err);
+			result(err, null);
 			return;
 		}
 
