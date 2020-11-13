@@ -22,6 +22,7 @@ app.use(cors());
 // entity
 require('./app/routes/user.routes')(app);
 require('./app/routes/recipe.routes')(app);
+require('./app/routes/ingredient.routes')(app);
 //require('.app/routes/ingredient.routes')(app);
 //require('./app/routes/diet.routes')(app);
 //require('./app/routes/cuisine.routes')(app);
