@@ -1,37 +1,19 @@
--- Define users table
-DROP TABLE IF EXISTS users;
-
-CREATE TABLE users (
-	email VARCHAR(255) NOT NULL UNIQUE PRIMARY KEY,
-	first_name VARCHAR(255) NOT NULL,
-	last_name VARCHAR(255) NOT NULL,
-	password VARCHAR(255) NOT NULL
-);
-
--- Insert sample users
-INSERT INTO users VALUES
-	("mscott@dundermifflin.com", "Michael", "Scott", "worldsbestboss"),
-	("jhalpert@dundermifflin.com", "Jim", "Halpert", "whichbearisbest"),
-	("dschrute@dundermifflin.com", "Dwight", "Schrute", "schrutefarms");
-
 -- Define recipes table
 DROP TABLE IF EXISTS recipes;
 
 CREATE TABLE recipes (
 	recipe_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-	user_id VARCHAR(255) NOT NULL REFERENCES users(email),
 	recipe_url VARCHAR(255) NOT NULL,
 	name VARCHAR(255) NOT NULL,
 	description VARCHAR(255) NOT NULL,
-	meal VARCHAR(255) NOT NULL,
 	serving_amount INT NOT NULL
 );
 
 -- Insert sample recipes
-INSERT INTO recipes VALUES
-	(0, "dschrute@dundermifflin.com", "https://www.schrutefarmsrecipes.com", "Beet Casserole", "Baked beetroot casserole", "Dinner", 6),
-	(0, "jhalpert@dundermifflin.com", "https://www.phillyinquirer.com", "Lasagna", "Beef lasagna with tomato sauce", "Lunch", 8),
-	(0, "mscott@dundermifflin.com", "https://www.foodnetwork.com", "Chicken Pot Pie", "Chicken pie with flaky crust", "Lunch", 1);
+INSERT INTO recipes (recipe_url, name, description, serving_amount) VALUES
+	("https://www.schrutefarmsrecipes.com", "Beet Casserole", "Baked beetroot casserole", 6),
+	("https://www.phillyinquirer.com", "Lasagna", "Beef lasagna with tomato sauce", 8),
+	("https://www.foodnetwork.com", "Chicken Pot Pie", "Chicken pie with flaky crust", 1);
 
 -- Define ingredients table
 DROP TABLE IF EXISTS ingredients;
@@ -42,17 +24,17 @@ CREATE TABLE ingredients(
 );
 
 -- Insert sample ingredients
-INSERT INTO ingredients VALUES
-	(0, "chicken breast"),
-	(0, "beetroot"),
-	(0, "tomato sauce"),
-	(0, "mozzarella cheese"),
-	(0, "lasagna noodles"),
-	(0, "ground beef"),
-	(0, "pie crust"),
-	(0, "heavy cream"),
-	(0, "frozen peas"),
-	(0, "frozen carrots");
+INSERT INTO ingredients (name) VALUES
+	("chicken breast"),
+	("beetroot"),
+	("tomato sauce"),
+	("mozzarella cheese"),
+	("lasagna noodles"),
+	("ground beef"),
+	("pie crust"),
+	("heavy cream"),
+	("frozen peas"),
+	("frozen carrots");
 
 
 -- Define recipe_ingredients table
@@ -88,10 +70,10 @@ CREATE TABLE cuisines(
 );
 
 -- Insert sample values into cuisines
-INSERT INTO cuisines VALUES
-	(0, "German"),
-	(0, "American"),
-	(0, "Italian");
+INSERT INTO cuisines (name) VALUES
+	("German"),
+	("American"),
+	("Italian");
 
 -- Define recipe_cuisines table
 DROP TABLE IF EXISTS recipe_cuisines;
@@ -117,8 +99,25 @@ CREATE TABLE diets(
 );
 
 -- Insert sample values into diets
-INSERT INTO diets VALUES
-	(0, "Keto")
+INSERT INTO diets (name) VALUES
+    ("Keto"),
+    ("Vegetarian"),
+    ("Vegan"),
+    ("Paleo");
+
+-- Define meals table
+DROP TABLE IF EXISTS meals;
+
+CREATE TABLE meals(
+    meal_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    name VARCHAR(255) UNIQUE NOT NULL
+);
+
+-- Insert sample values into meals
+INSERT INTO meals (name) VALUES
+    ("Breakfast"),
+    ("Lunch"),
+    ("Dinner");
 
 -- Define recipe_diets table
 DROP TABLE IF EXISTS recipe_diets;
@@ -131,4 +130,17 @@ CREATE TABLE recipe_diets(
 
 -- Insert sample values into recipe_diets
 INSERT INTO recipe_diets VALUES
-	((SELECT recipe_id FROM recipes WHERE recipes.name = "Beet Casserole"), (SELECT diet_id FROM diets WHERE diets.name = "Keto"));
+	((SELECT recipe_id FROM recipes WHERE recipes.name="Beet Casserole"), (SELECT diet_id FROM diets WHERE diets.name="Keto"));
+
+-- Define recipe_meals table
+DROP TABLE IF EXISTS recipe_meals;
+
+CREATE TABLE recipe_meals(
+    recipe_id INT NOT NULL REFERENCES recipes(recipe_id),
+    meal_id INT NOT NULL references meals(meal_id),
+    PRIMARY KEY(recipe_id, meal_id)
+);
+
+-- Insert sample values into recipe_meals
+INSERT INTO recipe_meals VALUES
+    ((SELECT recipe_id FROM recipes WHERE recipes.name="Beet Casserole"), (SELECT meal_id FROM meals WHERE meals.name="Breakfast"));
