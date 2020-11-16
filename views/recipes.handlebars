@@ -93,11 +93,19 @@
 	                </div>
 	                <div class="form-group">    
 	                    <label for="cuisine">Cuisine:</label>
-	                    <input type="text" class="form-control" name="cuisine" id="cuisine">
+	                    	<select class="form-control" name="cuisine" id="cuisine">
+	                    	<option>Italian</option>
+	                    	<option>Indian</option>
+	                    	<option>Chinese</option>
+	                    </select>
 	                </div>
 	                <div class="form-group">    
 	                    <label for="diet">Diet:</label>
-	                    <input type="text" class="form-control" name="diet" id="diet">
+	                    <select class="form-control" name="diet" id="diet">
+	                    	<option>Keto</option>
+	                    	<option>Vegan</option>
+	                    	<option>Vegetarian</option>
+	                    </select>
 	                </div>
 	                <div class="form-group">    
 	                    <label for="meal">Meal:</label>
@@ -109,6 +117,20 @@
 	                    	<option>Dessert</option>
 	                    </select>
 	                </div>
+                    <fieldset class="form-group checkbox-group">
+                        <div>
+                            <input type="checkbox" name="ingredients" value="chicken_breast" id="ingredient1">
+                            <label for="ingredient1">Chicken breast</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" name="ingredients" value="fresh_spinach" id="ingredient2">
+                            <label for="ingredient2">Fresh spinach</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" name="ingredients" value="salt" id="ingredient3">
+                            <label for="ingredient3">Salt</label>
+                        </div>
+                    </fieldset>
 
                     <!-- This button connects to a POST request -->
                     <input type="image" src="img/plus.png" class="add_item btn btn-success btn-sm">

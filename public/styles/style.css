@@ -66,22 +66,32 @@ input[type="image"] {
     display: none;
 }
 
-#filter {
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"] + label {
+    padding: 0 8px;
+    border-radius: 8px;
+    border-width: 1px;
+    border-style: solid;
+}
+
+input[type="checkbox"]:not(:checked) + label {
+    background-color: #d8d8d8;
+    border-color: #818181;
+    color: #818181;
+}
+
+input[type="checkbox"]:checked + label {
+    color: #e1e1e1;
+    background-color: #007bff;
+    border-color: #0055ff;
+}
+
+.checkbox-group {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
-}
-
-label[for="filter_box"] {
-    font-size: 1.5em;
-    color: silver;
-}
-
-#filter_box {
-    display: inline;
-    border-radius: 8px;
-    padding: 0 0.25em;
-    margin: 0.5em 0 1em;
-    flex-grow: 2;
-    margin-left: 0.5em;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
