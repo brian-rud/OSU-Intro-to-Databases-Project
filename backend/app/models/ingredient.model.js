@@ -36,11 +36,51 @@ Ingredient.fetchAll = result => {
 			return
 		}
 
-		ingredientArray = [];
+		const ingredientArray = [];
+
 		res.forEach(ingredientDbDto => ingredientArray.push(Ingredient.fromIngredientDbDto(ingredientDbDto)));
 		console.log("ingredients: ", ingredientArray);
 		result(null, ingredientArray);
 	})
+}
+
+Ingredient.addOne = (body, result) => {
+	sql.query('INSERT INTO ingredients (name) VALUES (?)', [body.name], (err, res) => {
+		if (err) {
+			console.log('Error: ', err)
+			result(err, null);
+			return
+		}
+
+		console.log('rows added: ', res.affectedRows);
+		result(null, res.affectedRows);
+	});
+}
+
+Ingredient.updateOne = (body, result) => {
+	sql.query('UPDATE ingredients SET name=? WHERE ingredient_id=?', [body.name, parseInt(body.ingredientId)], (err, res) => {
+		if (err) {
+			console.log('Error: ', err)
+			result(err, null);
+			return
+		}
+
+		console.log('rows affected: ', res.affectedRows);
+		result(null, res.affectedRows);
+	});
+}
+
+Ingredient.deleteOne = (body, result) => {
+	sql.query('DELETE FROM ingredients WHERE ingredient_id=?', [parseInt(body.ingredientId)], (err, res) => {
+		if (err) {
+			console.log('Error: ', err)
+			result(err, null);
+			return
+		}
+
+		console.log('rows affected: ', res.affectedRows);
+		result(null, res.affectedRows);
+	});
 }
 
 module.exports = Ingredient;
