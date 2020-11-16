@@ -95,3 +95,23 @@ input[type="checkbox"]:checked + label {
     flex-wrap: wrap;
     justify-content: space-between;
 }
+
+#filter {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+label[for="filter_box"] {
+    font-size: 1.5em;
+    color: silver;
+}
+
+#filter_box {
+    display: inline;
+    border-radius: 8px;
+    padding: 0 0.25em;
+    margin: 0.5em 0 1em;
+    flex-grow: 2;
+    margin-left: 0.5em;
+}
