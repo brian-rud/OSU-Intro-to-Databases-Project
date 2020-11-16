@@ -94,7 +94,6 @@ input[type="checkbox"]:checked + label {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
-
 }
 
 #filter {
@@ -115,5 +114,4 @@ label[for="filter_box"] {
     margin: 0.5em 0 1em;
     flex-grow: 2;
     margin-left: 0.5em;
-
 }
