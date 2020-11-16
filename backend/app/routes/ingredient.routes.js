@@ -12,4 +12,5 @@ module.exports = app => {
 
 	// Delete a single ingredient
 	app.delete("/ingredients/:ingredientId", ingredients.deleteOne);
+
 }

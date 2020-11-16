@@ -65,4 +65,5 @@ exports.deleteOne = (req, res) => {
 			});
 		}
 	})
+
 }

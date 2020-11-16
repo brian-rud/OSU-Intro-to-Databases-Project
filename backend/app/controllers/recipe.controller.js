@@ -2,6 +2,7 @@ const Recipe = require("../models/recipe.model");
 
 exports.findAll = (req, res) => {
 	Recipe.fetchAll((err, data) => {
+
 		if (err) {
 			return res.status(500).json({
 				message: err.message || "An error occurred while retrieving recipes"
@@ -41,7 +42,7 @@ exports.addOne = (req, res) => {
 		else {
 			return res.status(200).json({ affected_rows: data });
 		}
-	});
+	})
 }
 
 exports.updateOne = (req, res) => {
