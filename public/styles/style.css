@@ -66,6 +66,36 @@ input[type="image"] {
     display: none;
 }
 
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"] + label {
+    padding: 0 8px;
+    border-radius: 8px;
+    border-width: 1px;
+    border-style: solid;
+}
+
+input[type="checkbox"]:not(:checked) + label {
+    background-color: #d8d8d8;
+    border-color: #818181;
+    color: #818181;
+}
+
+input[type="checkbox"]:checked + label {
+    color: #e1e1e1;
+    background-color: #007bff;
+    border-color: #0055ff;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
 #filter {
     display: flex;
     flex-direction: row;
