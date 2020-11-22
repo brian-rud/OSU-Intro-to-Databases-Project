@@ -4,6 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const handlebars = require('express-handlebars').create({defaultLayout:'main'})
 const bodyParser = require('body-parser')
+const cors = require('cors');
 
 // Import routes
 const indexRouter = require('./routes/index')
@@ -25,6 +26,7 @@ app.set('view engine', 'handlebars')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
+app.use(cors());
 
 // Routing
 app.use('/', indexRouter)
