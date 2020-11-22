@@ -19,6 +19,14 @@ class Diet {
 			dietDbDto.name
 			);
 	}
+
+	static fromNewDietDbDto(cuisineId, newDietDbDto) {
+       	return new Diet(
+            cuisineId,
+            newDietDbDto.name,
+            newDietDbDto.description
+        )
+    }
 }
 
 class DietDbDto {

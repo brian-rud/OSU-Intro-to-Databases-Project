@@ -24,7 +24,6 @@ class Cuisine {
         return new Cuisine(
             cuisineId,
             newCuisineDbDto.name,
-            newCuisineDbDto.description
         )
     }
 }
