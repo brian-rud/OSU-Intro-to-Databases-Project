@@ -1,13 +1,12 @@
 const sql = require("./db.js");
 
 class Recipe {
-	constructor(recipeId, recipeUrl, name, description, meal, userId, servingAmount){
+	constructor(recipeId, recipeUrl, name, description, meal, servingAmount){
 		this.recipeId = recipeId;
 		this.recipeUrl = recipeUrl;
 		this.name = name;
 		this.description = description;
 		this.meal = meal;
-		this.userId = userId;
 		this.servingAmount = servingAmount
 	}
 
@@ -18,7 +17,6 @@ class Recipe {
 			reqBody.name,
 			reqBody.description,
 			reqBody.meal,
-			reqBody.userId,
 			reqBody.servingAmount
 			);
 	}
@@ -30,20 +28,18 @@ class Recipe {
 			recipeDbDto.name,
 			recipeDbDto.description,
 			recipeDbDto.meal,
-			recipeDbDto.user_id,
 			recipeDbDto.serving_amount
 			);
 	}
 }
 
 class RecipeDbDto {
-	constructor(recipe_id, recipe_url, name, description, meal, user_id, serving_amount){
+	constructor(recipe_id, recipe_url, name, description, meal, serving_amount){
 		this.recipe_id = recipe_id;
 		this.recipe_url = recipe_url;
 		this.name = name;
 		this.description = description;
 		this.meal = meal;
-		this.user_id = user_id;
 		this.serving_amount = serving_amount;
 	}
 }
@@ -82,10 +78,9 @@ Recipe.fetchOne = (body, result) => {
 
 Recipe.addOne = (body, result) => {
 	sql.query(
-		"INSERT INTO recipes (user_id, recipe_url, name, description, meal, serving_amount) " +
-		"VALUES(?, ?, ?, ?, ?, ?);",
+		"INSERT INTO recipes (recipe_url, name, description, meal, serving_amount) " +
+		"VALUES(?, ?, ?, ?, ?);",
 		[
-			parseInt(body.userId),
 			body.recipeUrl,
 			body.name,
 			body.description,
