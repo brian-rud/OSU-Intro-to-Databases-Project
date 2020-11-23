@@ -19,12 +19,20 @@ class Diet {
 			dietDbDto.name
 			);
 	}
+
+	static fromNewDietDbDto(dietId, newDietDbDto) {
+       	return new Diet(
+            dietId,
+            newDietDbDto.name,
+            newDietDbDto.description
+        )
+    }
 }
 
 class DietDbDto {
-	constructor(diet_id, name){
-		this.diet_id = diet_id;
-		this.name = name;
+	constructor(diet){
+		this.diet_id = diet.dietId;
+		this.name = diet.name;
 	}
 }
 
@@ -42,5 +50,36 @@ Diet.fetchAll = result => {
 	})
 
 }
+
+Diet.create = (newDiet, result) => {
+    let dietDbDto = new DietDbDto(newDiet);
+    console.log("Creating diet:");
+    console.log(dietDbDto);
+
+    sql.getConnection(function (err, connection) {
+
+        connection.beginTransaction(function (err) {
+
+            sql.query("INSERT INTO diets SET ?", dietDbDto, (err, res) => {
+                if (err) {
+                    connection.rollback();
+                    connection.release();
+                    console.log("error: ", err);
+                    result(err, null);
+                    return;
+                }
+
+                connection.commit();
+                connection.release();
+
+                var newDietResult = Diet.fromNewDietDbDto(res.insertId, dietDbDto);
+
+                console.log("Created diet: ", newDietResult);
+                result(null, newDietResult);
+            });
+        });
+
+    });
+};
 
 module.exports = Diet;

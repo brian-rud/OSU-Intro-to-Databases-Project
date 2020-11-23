@@ -19,12 +19,19 @@ class Cuisine {
 		 cuisineDbDto.name
 		);
 	}
+
+	static fromNewCuisineDbDto(cuisineId, newCuisineDbDto) {
+        return new Cuisine(
+            cuisineId,
+            newCuisineDbDto.name,
+        )
+    }
 }
 
 class CuisineDbDto {
-	constructor (cuisine_id, name){
-		this.cuisine_id = cuisine_id;
-		this.name = name;
+	constructor (cuisine){
+		this.cuisine_id = cuisine.cuisineId;
+		this.name = cuisine.name;
 	}
 }
 
@@ -42,5 +49,37 @@ Cuisine.fetchAll = result => {
 	})
 
 }
+
+Cuisine.create = (newCuisine, result) => {
+    let cuisineDbDto = new CuisineDbDto(newCuisine);
+    console.log("Creating cuisine:");
+    console.log(cuisineDbDto);
+
+    sql.getConnection(function (err, connection) {
+
+        connection.beginTransaction(function (err) {
+
+            sql.query("INSERT INTO cuisines SET ?", cuisineDbDto, (err, res) => {
+                if (err) {
+                    connection.rollback();
+                    connection.release();
+                    console.log("error: ", err);
+                    result(err, null);
+                    return;
+                }
+
+                connection.commit();
+                connection.release();
+
+                var newCuisineResult = Cuisine.fromNewCuisineDbDto(res.insertId, cuisineDbDto);
+
+                console.log("Created cuisine: ", newCuisineResult);
+                result(null, newCuisineResult);
+            });
+        });
+
+    });
+};
+
 
 module.exports = Cuisine;

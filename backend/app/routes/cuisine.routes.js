@@ -3,4 +3,7 @@ module.exports = app => {
 
 	// Retrieve all cuisines
 	app.get("/cuisines", cuisines.findAll);
+
+	// Add cuisine
+	app.post("/cuisines", cuisines.create)
 }
