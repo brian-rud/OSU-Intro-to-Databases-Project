@@ -10,10 +10,10 @@
                 </div>
                 <!-- TODO: Import Recipes from context object. -->
                 <ul>
-                    {{#each item}}
+                    {{#each recipeArray.data}}
                         <li>
                             <form action="/recipes">
-                                <input type="hidden" value="{{this.id}}" name="item">
+                                <input type="hidden" value="{{this.recipe_id}}" name="item">
                                 <input type="text" value="{{this.name}}" class="editable_input" disabled>
                                 <div>
                                     <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
@@ -28,51 +28,8 @@
                             </form>
                         </li>
                     {{/each}}
-                    <!-- TODO: Remove the following 3 examples once the server is connected. -->
-                    <li>
-                        <form action="/recipes">
-                            <input type="hidden" value="recipe1_id" name="item">
-                            <input type="text" value="Recipe 1" class="editable_input" disabled>
-                            <div>
-                                <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
-                                <!-- This button connects to a PUT request -->
-                                <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
-                            </div>
-                            <div>
-                                <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm">
-                                <!-- This button connects to a DELETE request -->
-                                <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
-                            </div>
-                        </form>
-                    </li>
-                    <li>
-                        <form action="/recipes">
-                            <input type="hidden" value="recipe2_id" name="item">
-                            <input type="text" disabled value="Recipe 2" class="editable_input">
-                            <div>
-                                <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
-                                <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
-                            </div>
-                            <div>
-                                <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-success btn-sm">
-                                <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
-                            </div>
-                        </form>
-                    </li>
-                    <li>
-                        <form action="/recipes">
-                            <input type="hidden" value="recipe3_id" name="item">
-                            <input type="text" disabled value="Recipe 3" class="editable_input">
-                            <div>
-                                <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
-                                <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
-                            </div>
-                            <div>
-                                <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-success btn-sm">
-                                <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
-                            </div>
-                        </form>
-                    </li>
+          
+                   
                 </ul>
             </section>
             <section>
@@ -94,17 +51,17 @@
 	                <div class="form-group">    
 	                    <label for="cuisine">Cuisine:</label>
 	                    	<select class="form-control" name="cuisine" id="cuisine">
-	                    	<option>Italian</option>
-	                    	<option>Indian</option>
-	                    	<option>Chinese</option>
+                            {{#each cuisineArray}}
+	                    	  <option>{{this.name}}</option>
+                            {{/each}}
 	                    </select>
 	                </div>
 	                <div class="form-group">    
 	                    <label for="diet">Diet:</label>
 	                    <select class="form-control" name="diet" id="diet">
-	                    	<option>Keto</option>
-	                    	<option>Vegan</option>
-	                    	<option>Vegetarian</option>
+                            {{#each dietArray}}
+                                <option>{{this.name}}</option>
+                            {{/each}}
 	                    </select>
 	                </div>
 	                <div class="form-group">    
@@ -118,18 +75,12 @@
 	                    </select>
 	                </div>
                     <fieldset class="form-group checkbox-group">
-                        <div>
-                            <input type="checkbox" name="ingredients" value="chicken_breast" id="ingredient1">
-                            <label for="ingredient1">Chicken breast</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" name="ingredients" value="fresh_spinach" id="ingredient2">
-                            <label for="ingredient2">Fresh spinach</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" name="ingredients" value="salt" id="ingredient3">
-                            <label for="ingredient3">Salt</label>
-                        </div>
+                        {{#each ingredientArray}}
+                            <div>
+                                <input type="checkbox" name="ingredients" value="chicken_breast" id="{{this.ingredientId}}">
+                                <label for="{{this.ingredientId}}">{{this.name}}</label>
+                            </div>
+                        {{/each}}
                     </fieldset>
 
                     <!-- This button connects to a POST request -->
