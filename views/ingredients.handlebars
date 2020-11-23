@@ -10,7 +10,7 @@
                 </div>
                 <!-- TODO: Import ingredients from context object. -->
                 <ul>
-                    {{#each item}}
+                    {{#each ingredientsArray}}
                         <li>
                             <form action="/ingredients">
                                 <input type="hidden" value="{{this.id}}" name="item">
@@ -28,51 +28,6 @@
                             </form>
                         </li>
                     {{/each}}
-                    <!-- TODO: Remove the following 3 examples once the server is connected. -->
-                    <li>
-                        <form action="/ingredients">
-                            <input type="hidden" value="item1_id" name="item">
-                            <input type="text" value="Item 1" class="editable_input" disabled>
-                            <div>
-                                <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
-                                <!-- This button connects to a PUT request -->
-                                <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
-                            </div>
-                            <div>
-                                <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm">
-                                <!-- This button connects to a DELETE request -->
-                                <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
-                            </div>
-                        </form>
-                    </li>
-                    <li>
-                        <form action="/ingredients">
-                            <input type="hidden" value="item2_id" name="item">
-                            <input type="text" disabled value="Item 2" class="editable_input">
-                            <div>
-                                <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
-                                <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
-                            </div>
-                            <div>
-                                <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-success btn-sm">
-                                <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
-                            </div>
-                        </form>
-                    </li>
-                    <li>
-                        <form action="/ingredients">
-                            <input type="hidden" value="item3_id" name="item">
-                            <input type="text" disabled value="Item 3" class="editable_input">
-                            <div>
-                                <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
-                                <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
-                            </div>
-                            <div>
-                                <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-success btn-sm">
-                                <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
-                            </div>
-                        </form>
-                    </li>
                 </ul>
             </section>
             <section>
