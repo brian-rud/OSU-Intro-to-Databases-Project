@@ -45,8 +45,9 @@ function prepareItemEditButtons(itemEditButtons) {
                 cancelEditButton.style.display = 'block';
                 deleteItemButton.style.display = 'none';
 
-                // Make input editable
+                // Make input editable and save previous value
                 textNode.disabled = false;
+                textNode.oldValue = textNode.value;
             });
         }
     }
@@ -71,8 +72,10 @@ function prepareCancelItemEditButtons(cancelItemEditButtons) {
                 cancelEditButton.style.display = 'none';
                 deleteItemButton.style.display = 'block';
 
-                // Make input un-editable
+                // Revert value and make input un-editable
                 textNode.disabled = true;
+                textNode.value = textNode.oldValue;
+                delete textNode.oldValue;
             });
         }
     }
