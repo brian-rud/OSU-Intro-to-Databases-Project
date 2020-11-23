@@ -54,7 +54,6 @@ function prepareItemEditButtons(itemEditButtons) {
 }
 
 function prepareCancelItemEditButtons(cancelItemEditButtons) {
-    // TODO: Cancel button should revert value back to original value
     for (let i in cancelItemEditButtons) {
         if (cancelItemEditButtons.hasOwnProperty(i)) {
             cancelItemEditButtons[i].addEventListener('click', (e) => {
