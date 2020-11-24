@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
 
     prepareItemEditButtons(itemEditButtons);
     prepareCancelItemEditButtons(cancelItemEditButtons);
+    prepareConfirmItemEditButtons(confirmItemEditButtons);
     setupFilter();
 });
 
@@ -85,6 +86,12 @@ function prepareConfirmItemEditButtons(confirmItemEditButtons) {
         if (confirmItemEditButtons.hasOwnProperty(i)) {
             // TODO: Send value (item id) from hidden input and value (item name)
             //       from text input to server with PUT request.
+            confirmItemEditButtons[i].addEventListener('click', e => {
+                const form = confirmItemEditButtons[i].parentNode.parentNode;
+
+                form.method = 'PUT';
+                form.submit();
+            });
         }
     }
 }
