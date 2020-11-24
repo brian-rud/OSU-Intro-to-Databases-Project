@@ -8,12 +8,10 @@
                     <label for="filter_box">Filter:</label>
                     <input type="text" id="filter_box">
                 </div>
-                <!-- TODO: Import cuisines from context object. -->
                 <ul>
                     {{#each cuisineArray}}
                         <li>
-                            <form action="/cuisines">
-                                <input type="hidden" value="{{this.id}}" name="item">
+                            <form action="/cuisines/{{this.cuisineId}}">
                                 <input type="text" value="{{this.name}}" class="editable_input" disabled>
                                 <div>
                                     <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
@@ -28,9 +26,7 @@
                             </form>
                         </li>
                     {{/each}}
-                    <!-- TODO: Remove the following 3 examples once the server is connected. -->
-
-
+                </ul>
             </section>
             <section>
                 <h2>Add Cuisines</h2>

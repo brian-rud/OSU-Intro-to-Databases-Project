@@ -81,5 +81,12 @@ Cuisine.create = (newCuisine, result) => {
     });
 };
 
+Cuisine.updateOne = () => {
+
+};
+
+Cuisine.deleteOne = () => {
+
+}
 
 module.exports = Cuisine;
