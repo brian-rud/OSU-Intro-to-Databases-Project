@@ -4,16 +4,13 @@ module.exports = app => {
 	// Retrieve all meals
 	app.get("/meals", meals.findAll);
 
-	// Retrieve a meal
-	app.get("/meals/:mealId", meals.findOne);
+	// Add meal
+	app.post("/meals", meals.create);
 
-	// Add a meal
-	app.post("/meals", meals.addOne);
+	// Update meal
+	app.put("/meals/:mealId", meals.updateOne);
 
-	// Update a meal
-	app.put("/meals/:meal_id", meals.updateOne);
-
-	// Delete a meal
+	// Delete meal
 	app.delete("/meals/:mealId", meals.deleteOne);
 }
 

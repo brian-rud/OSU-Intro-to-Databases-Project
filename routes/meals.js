@@ -18,7 +18,6 @@ router.get('/', (req,res) => {
     	}
 
     	const mealArray = body;
-    	console.log(body)
     	res.render('meals', {mealArray});
     	
     });
@@ -27,11 +26,11 @@ router.get('/', (req,res) => {
 router.post('/', (req,res) => {
     const options = {
     	method: "POST",
-    	body: {meal_id: 0, name:req.body.add_item},
+    	body: {id: 0, name:req.body.add_item},
     	json: true,
     	url: meal_api_url
     };
-    console.log(options.body)
+    
     request(options, (err, res1, body) => {
     	if (err){
     		console.log("There was an error adding meal");
