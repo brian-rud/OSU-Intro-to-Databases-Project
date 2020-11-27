@@ -1,8 +1,63 @@
 const express = require('express')
-const router = express.Router()
+const request = require('request');
+const router = express.Router();
+const meal_api_url = "http://localhost:8998/meals";
 
-router.get('/', (req, res) => {
-    res.render('meals')
-})
+router.get('/', (req,res) => {
+    const options = {
+    	method: "GET",
+    	body: {},
+    	json: true,
+    	url: meal_api_url
+    };
 
-module.exports = router
+    request(options, (err, res1, body) => {
+    	if (err){
+    		console.log("There was an error requesting meals from backend API");
+    		return;
+    	}
+
+    	const mealArray = body;
+    	console.log(body)
+    	res.render('meals', {mealArray});
+    	
+    });
+});
+
+router.post('/', (req,res) => {
+    const options = {
+    	method: "POST",
+    	body: {meal_id: 0, name:req.body.add_item},
+    	json: true,
+    	url: meal_api_url
+    };
+    console.log(options.body)
+    request(options, (err, res1, body) => {
+    	if (err){
+    		console.log("There was an error adding meal");
+    		return;
+    	}
+
+		res.redirect('/meals');
+    });
+});
+
+router.put('/', (req, res) => {
+	const options = {
+		method: "PUT",
+		body: {},
+		json: true,
+		url: meal_api_url
+	};
+
+	request(options, (err, res1, body) => {
+		if (err) {
+			console.log("There was an error updating a meal");
+			return;
+		}
+
+		res.redirect('/meals');
+	});
+});
+
+module.exports = router;
