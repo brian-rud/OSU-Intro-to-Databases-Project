@@ -95,6 +95,7 @@ Meal.updateOne = (body, params, result) => {
 }
 
 Meal.deleteOne = (body, result) => {
+	console.log(body);
 	sql.query("DELETE FROM meals WHERE meal_id = ?;", [parseInt(body.mealId)], (err, res) => {
 		if (err) {
 			console.log("Error: ", err);
