@@ -17,9 +17,7 @@ exports.findAll = (req, res) => {
 exports.create = (req, res) => {
     // Validate request
     if (!req.body) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
+        return res.status(400).send({ message: "Content can not be empty!" });
     }
 
     // Instantiate a Cuisine from incoming HTTP Request
@@ -35,5 +33,38 @@ exports.create = (req, res) => {
             res.setHeader('Content-Type', 'application/json');
             res.send(data);
         }
+    });
+};
+
+exports.updateOne = (req, res) => {
+    if (!req.body || !req.params) {
+        return res.status(400).json({ message: "Content can not be empty!" });
+    }
+
+    // Include cuisineId from route in body
+    Object.assign(req.body, req.params);
+    console.log(req.body);
+
+    Cuisine.updateOne(req.body, (err, data) => {
+        if (err) {
+            return res.status(500).json({ message: err.message || "Some error occurred while creating the Cuisine." });
+        }
+
+        return res.status(200).json({ data });
+    });
+};
+
+exports.deleteOne = (req, res) => {
+    if (!req.params) {
+        return res.status(400).json({ message: "Content can not be empty!" });
+    }
+
+    // Include cuisineId from route in body
+    Cuisine.deleteOne(req.params.cuisineId, (err, data) => {
+        if (err) {
+            return res.status(500).json({ message: err.message || "Some error occurred while creating the Cuisine. "});
+        }
+
+        return res.status(200).json(data);
     });
 };

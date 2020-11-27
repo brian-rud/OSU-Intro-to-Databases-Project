@@ -1,18 +1,15 @@
 const express = require('express')
 const request = require('request');
-router = express.Router()
+const router = express.Router();
+const cuisine_api_url = "http://localhost:8998/cuisines";
 
 router.get('/', (req,res) => {
-    
-    var cuisine_api_url = "http://localhost:8998/cuisines";
-    var options = {
+    const options = {
     	method: "GET",
     	body: {},
     	json: true,
     	url: cuisine_api_url
     };
-
-    let cuisineArray = [];
 
     request(options, (err, res1, body) => {
     	if (err){
@@ -20,17 +17,14 @@ router.get('/', (req,res) => {
     		return;
     	}
 
-    	cuisineArray = body;
+    	const cuisineArray = body;
     	res.render('cuisines', {cuisineArray});
     	
-    })
-   
-})
+    });
+});
 
 router.post('/', (req,res) => {
-	
-	var cuisine_api_url = "http://localhost:8998/cuisines";
-    var options = {
+    const options = {
     	method: "POST",
     	body: {id: 0, name:req.body.add_item},
     	json: true,
@@ -43,21 +37,26 @@ router.post('/', (req,res) => {
     		return;
     	}
 
-    	options.method = "GET";
-    	options.body = {};
-    	let cuisinesArray = [];
+		res.redirect('/cuisines');
+    });
+});
 
-    	request(options, (geterr, getres, getbody) => {
-    		if(err){
-    			console.log("There was an error displaying cuisines");
-    			return;
-    		}
+router.put('/', (req, res) => {
+	const options = {
+		method: "PUT",
+		body: {},
+		json: true,
+		url: cuisine_api_url
+	};
 
-    		cuisinesArray = getbody;
-    		res.redirect('/cuisines');
+	request(options, (err, res1, body) => {
+		if (err) {
+			console.log("There was an error updating a cuisine");
+			return;
+		}
 
-    	})
-    })
-})
+		res.redirect('/cuisines');
+	});
+});
 
-module.exports = router
+module.exports = router;
