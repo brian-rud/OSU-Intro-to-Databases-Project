@@ -12,7 +12,7 @@
                     {{#each cuisineArray}}
                         <li>
                             <form action="/cuisines/{{this.cuisineId}}">
-                                <input type="text" value="{{this.name}}" class="editable_input" disabled>
+                                <input type="text" name="name" value="{{this.name}}" class="editable_input" disabled>
                                 <div>
                                     <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
                                     <!-- This button connects to a PUT request -->

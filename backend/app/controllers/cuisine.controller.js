@@ -43,9 +43,9 @@ exports.updateOne = (req, res) => {
 
     // Include cuisineId from route in body
     Object.assign(req.body, req.params);
-    let cuisine = Cuisine.fromReqBody(req.body);
+    console.log(req.body);
 
-    Cuisine.updateOne(cuisine, (err, data) => {
+    Cuisine.updateOne(req.body, (err, data) => {
         if (err) {
             return res.status(500).json({ message: err.message || "Some error occurred while creating the Cuisine." });
         }
@@ -55,19 +55,16 @@ exports.updateOne = (req, res) => {
 };
 
 exports.deleteOne = (req, res) => {
-    if (!req.body || !req.params) {
+    if (!req.params) {
         return res.status(400).json({ message: "Content can not be empty!" });
     }
 
     // Include cuisineId from route in body
-    Object.assign(req.body, req.params);
-    let cuisine = Cuisine.fromReqBody(req.body);
-
-    Cuisine.deleteOne(cuisine, (err, data) => {
+    Cuisine.deleteOne(req.params.cuisineId, (err, data) => {
         if (err) {
             return res.status(500).json({ message: err.message || "Some error occurred while creating the Cuisine. "});
         }
 
-        return res.status(200).json({ data });
+        return res.status(200).json(data);
     });
 };

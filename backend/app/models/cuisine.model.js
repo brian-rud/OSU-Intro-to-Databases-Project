@@ -52,12 +52,10 @@ Cuisine.fetchAll = result => {
 
 Cuisine.create = (newCuisine, result) => {
     let cuisineDbDto = new CuisineDbDto(newCuisine);
-    console.log("Creating cuisine:");
-    console.log(cuisineDbDto);
+    console.log("Creating cuisine:", cuisineDbDto);
 
-    sql.getConnection(function (err, connection) {
-
-        connection.beginTransaction(function (err) {
+    sql.getConnection((err, connection) => {
+        connection.beginTransaction(err => {
 
             sql.query("INSERT INTO cuisines SET ?", cuisineDbDto, (err, res) => {
                 if (err) {
@@ -77,16 +75,53 @@ Cuisine.create = (newCuisine, result) => {
                 result(null, newCuisineResult);
             });
         });
-
     });
 };
 
-Cuisine.updateOne = () => {
+Cuisine.updateOne = (body, result) => {
+	console.log("Updating cuisine:", body);
 
+	sql.getConnection((err, connection) => {
+		connection.beginTransaction(err => {
+			sql.query("UPDATE cuisines SET name = ? WHERE cuisine_id = ?", [body.name, body.cuisineId], (err, res) => {
+				if (err) {
+					connection.rollback();
+					connection.release();
+					console.log("error:", err);
+					result(err, null);
+					return;
+				}
+
+				connection.commit();
+				connection.release();
+
+				console.log("Updated cuisine: ", res.insertId);
+				result(null, res.insertId);
+			});
+		});
+	});
 };
 
-Cuisine.deleteOne = () => {
+Cuisine.deleteOne = (cuisineId, result) => {
+	sql.getConnection((err, connection) => {
+		connection.beginTransaction(err => {
+			sql.query("DELETE FROM cuisines WHERE cuisine_id = ?", [cuisineId], (err, res) => {
+				if (err) {
+					connection. rollback();
+					connection.release();
+					console.log("error:", err);
+					result(err, null);
+					return;
+				}
 
+				connection.commit();
+				connection.release();
+
+				console.log("Deleted cuisine:", res.insertId);
+				result(null, res.insertId);
+			});
+		});
+	});
 }
 
 module.exports = Cuisine;

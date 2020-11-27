@@ -1,13 +1,9 @@
 document.addEventListener('DOMContentLoaded', (e) => {
-    const itemEditButtons = document.getElementsByClassName('item_edit');
-    const cancelItemEditButtons = document.getElementsByClassName('cancel_item_edit');
-    const confirmItemEditButtons = document.getElementsByClassName('confirm_item_edit');
-    const deleteItemButtons = document.getElementsByClassName('delete_item');
-    const addItemButtons = document.getElementsByClassName('add_item');
+    /* Prepare form buttons */
+    prepareItemEditButtons();
+    prepareCancelItemEditButtons();
+    prepareConfirmItemEditButtons();
 
-    prepareItemEditButtons(itemEditButtons);
-    prepareCancelItemEditButtons(cancelItemEditButtons);
-    prepareConfirmItemEditButtons(confirmItemEditButtons);
     setupFilter();
 });
 
@@ -28,75 +24,74 @@ function setupFilter() {
     });
 }
 
-function prepareItemEditButtons(itemEditButtons) {
+function prepareItemEditButtons() {
+    const itemEditButtons = document.getElementsByClassName('item_edit');
+
     for (let i in itemEditButtons) {
         if (itemEditButtons.hasOwnProperty(i)) {
             itemEditButtons[i].addEventListener('click', (e) => {
                 e.preventDefault();
 
-                const itemEditButton = e.target;
-                const confirmEditButton = e.target.nextElementSibling;
-                const cancelEditButton = e.target.parentNode.nextElementSibling.children[0];
-                const deleteItemButton = e.target.parentNode.nextElementSibling.children[1];
-                const textNode = e.target.parentNode.parentNode.children[1];
-
-                // Update visible buttons
-                itemEditButton.style.display = 'none';
-                confirmEditButton.style.display = 'block';
-                cancelEditButton.style.display = 'block';
-                deleteItemButton.style.display = 'none';
-
-                // Make input editable and save previous value
-                textNode.disabled = false;
-                textNode.oldValue = textNode.value;
+                toggleEdit(e.target);
             });
         }
     }
 }
 
-function prepareCancelItemEditButtons(cancelItemEditButtons) {
+function prepareCancelItemEditButtons() {
+    const cancelItemEditButtons = document.getElementsByClassName('cancel_item_edit');
+
     for (let i in cancelItemEditButtons) {
         if (cancelItemEditButtons.hasOwnProperty(i)) {
             cancelItemEditButtons[i].addEventListener('click', (e) => {
                 e.preventDefault();
 
-                const itemEditButton = e.target.parentNode.previousElementSibling.children[0];
-                const confirmEditButton = e.target.parentNode.previousElementSibling.children[1];
-                const cancelEditButton = e.target;
-                const deleteItemButton = e.target.nextElementSibling;
-                const textNode = e.target.parentNode.parentNode.children[1];
-
-                // Update visible buttons
-                itemEditButton.style.display = 'block';
-                confirmEditButton.style.display = 'none';
-                cancelEditButton.style.display = 'none';
-                deleteItemButton.style.display = 'block';
-
-                // Revert value and make input un-editable
-                textNode.disabled = true;
-                textNode.value = textNode.oldValue;
-                delete textNode.oldValue;
+                toggleEdit(e.target);
             });
         }
     }
 }
 
-function prepareConfirmItemEditButtons(confirmItemEditButtons) {
+function prepareConfirmItemEditButtons() {
+    const confirmItemEditButtons = document.getElementsByClassName('confirm_item_edit');
+
     for (let i in confirmItemEditButtons) {
         if (confirmItemEditButtons.hasOwnProperty(i)) {
-            // TODO: Send value (item id) from hidden input and value (item name)
-            //       from text input to server with PUT request.
             confirmItemEditButtons[i].addEventListener('click', e => {
-                const form = confirmItemEditButtons[i].parentNode.parentNode;
+                e.preventDefault();
 
-                form.method = 'PUT';
-                form.submit();
+                const form = confirmItemEditButtons[i].parentNode.parentNode;
+                const url = 'http://localhost:8998' + new URL(form.action).pathname;
+                const data = new URLSearchParams();
+
+                for (const elem of form.elements) {
+                    data.append(elem.name, elem.value);
+                }
+
+                fetch(url, {
+                    method: 'PUT',
+                    redirect: 'follow',
+                    body: data
+                }).then(response => {
+                    console.log(response.status);
+                    if (response.status >= 200 && response.status < 400) {
+                        // TODO: Confirm message
+                        form.oldValue = form.value;
+                        toggleEdit(e.target);
+                    } else {
+                        // TODO: Make error message nicer
+                        toggleEdit(e.target);
+                        alert('Error updating');
+                    }
+                });
             });
         }
     }
 }
 
-function prepareDeleteItemButtons(deleteItemButtons) {
+function prepareDeleteItemButtons() {
+    const deleteItemButtons = document.getElementsByClassName('delete_item');
+
     for (let i in deleteItemButtons) {
         if (deleteItemButtons.hasOwnProperty(i)) {
             // TODO: Send value (item id) from hidden input to server with DELETE request
@@ -104,10 +99,43 @@ function prepareDeleteItemButtons(deleteItemButtons) {
     }
 }
 
-function prepareAddItemButtons(addItemButtons) {
-    for (let i in addItemButtons) {
-        if (addItemButtons.hasOwnProperty(i)) {
-            // TODO: Send value (item naem) from input to server with POST request
+function toggleEdit(node) {
+    /* Accepts a node which must be nested within a form */
+    let form = node;
+    try {
+        while (form.tagName !== 'FORM') {
+            form = form.parentNode;
         }
+    }
+    catch {
+        console.log('no parent form');
+        return;
+    }
+
+    /* Toggle all buttons display between block and none */
+    const buttons = {
+        edit: form.getElementsByClassName('item_edit')[0],
+        confirm: form.getElementsByClassName('confirm_item_edit')[0],
+        cancel: form.getElementsByClassName('cancel_item_edit')[0],
+        delete: form.getElementsByClassName('delete_item')[0]
+    }
+
+    for (let i in buttons) {
+        if (buttons.hasOwnProperty(i)) {
+            const display = window.getComputedStyle(buttons[i]).display;
+            buttons[i].style.display = display === 'block' ? 'none' : 'block';
+        }
+    }
+
+    /* Toggle whether the input is editable */
+    const input = form.getElementsByClassName('editable_input')[0];
+    input.disabled = !input.disabled;
+
+    /* Revert value if edit cancelled; otherwise save old value */
+    if (input.disabled === true) {
+        input.value = input.oldValue;
+        delete input.oldValue;
+    } else {
+        input.oldValue = input.value;
     }
 }
