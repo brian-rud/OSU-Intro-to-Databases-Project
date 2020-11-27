@@ -12,9 +12,8 @@
                 <ul>
                     {{#each item}}
                         <li>
-                            <form action="/meals">
-                                <input type="hidden" value="{{this.id}}" name="item">
-                                <input type="text" value="{{this.name}}" class="editable_input" disabled>
+                            <form action="/meals/{{this.mealId}}">
+                                <input type="text" name="name" value="{{this.name}}" class="editable_input" disabled>
                                 <div>
                                     <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
                                     <!-- This button connects to a PUT request -->
