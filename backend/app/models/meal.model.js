@@ -62,9 +62,9 @@ Meal.fetchOne = (body, result) => {
 Meal.addOne = (body, result) => {
 	sql.query(
 		"INSERT INTO meals (meal_id, name) " +
-		"VALUES(?, ?);",
+		"VALUES (?, ?);",
 		[
-			parseInt(body.mealId),
+			parseInt(body.meal_id),
 			body.name,
 		],
 		(err, res) => {
