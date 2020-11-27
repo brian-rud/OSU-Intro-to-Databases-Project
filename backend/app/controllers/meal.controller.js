@@ -1,76 +1,70 @@
-const Meal = require("../models/meal.model");
+const Meal = require('../models/meal.model');
 
 exports.findAll = (req, res) => {
 	Meal.fetchAll((err, data) => {
+		if(err)
+			res.status(500).send({message: err.message || "There was an error retrieving Meals"});
 
-		if (err) {
-			return res.status(500).json({
-				message: err.message || "An error occurred while retrieving meals"
-			});
+		else{
+			res.setHeader('Content-Type', 'application/json');
+			res.send(data);
 		}
 
-		else {
-			return res.status(200).json({ data });
-		}
-	});
-}
-
-exports.findOne = (req, res) => {
-	Object.assign(req.body, req.params);
-
-	Meal.fetchOne(req.body, (err, data) => {
-		if (err) {
-			return res.status(500).json({
-				message: err.message || "An error occurred while retrieving a meal"
-			});
-		}
-
-		else {
-			return res.status(200).json({ data });
-		}
 	})
 }
 
-exports.addOne = (req, res) => {
-	Meal.addOne(req.body,(err, data) => {
-		if (err) {
-			return res.status(500).json({
-				message: err.message || "An error occurred while adding a meal"
-			});
-		}
+// Create and Save a new Meal
+exports.create = (req, res) => {
+    // Validate request
+    if (!req.body) {
+        return res.status(400).send({ message: "Content can not be empty!" });
+    }
 
-		else {
-			return res.status(200).json({ affected_rows: data });
-		}
-	})
-}
+    // Instantiate a Meal from incoming HTTP Request
+    let meal = Meal.fromReqBody(req.body);
+
+    Meal.create(meal, (err, data) => {
+        if (err) {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while creating the Meal."
+            });
+        } else {
+            res.setHeader('Content-Type', 'application/json');
+            res.send(data);
+        }
+    });
+};
 
 exports.updateOne = (req, res) => {
-	Meal.updateOne(req.body, req.params, (err, data) => {
-		if (err) {
-			return res.status(500).json({
-				message: err.message || "An error occurred while updating a meal"
-			});
-		}
+    if (!req.body || !req.params) {
+        return res.status(400).json({ message: "Content can not be empty!" });
+    }
 
-		else {
-			return res.status(200).json({ affectedRows: data });
-		}
-	});
-}
+    // Include mealId from route in body
+    Object.assign(req.body, req.params);
+    console.log(req.body);
+
+    Meal.updateOne(req.body, (err, data) => {
+        if (err) {
+            return res.status(500).json({ message: err.message || "Some error occurred while creating the Meal." });
+        }
+
+        return res.status(200).json({ data });
+    });
+};
 
 exports.deleteOne = (req, res) => {
-	Object.assign(req.body, req.params);
+    if (!req.params) {
+        return res.status(400).json({ message: "Content can not be empty!" });
+    }
 
-	Meal.deleteOne(req.body, (err, data) => {
-		if (err) {
-			return res.status(500).json({
-				message: err.message || "An error occurred while deleting a meal"
-			});
-		}
+    // Include mealId from route in body
+    Meal.deleteOne(req.params.mealId, (err, data) => {
+        if (err) {
+            return res.status(500).json({ message: err.message || "Some error occurred while creating the Meal. "});
+        }
 
-		else {
-			return res.status(200).json({ affectedRows: data });
-		}
-	});
-}
+        return res.status(200).json(data);
+    });
+};
