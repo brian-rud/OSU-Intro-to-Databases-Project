@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
     prepareItemEditButtons();
     prepareCancelItemEditButtons();
     prepareConfirmItemEditButtons();
+    prepareDeleteItemButtons();
 
     setupFilter();
 });
@@ -60,7 +61,7 @@ function prepareConfirmItemEditButtons() {
             confirmItemEditButtons[i].addEventListener('click', e => {
                 e.preventDefault();
 
-                const form = confirmItemEditButtons[i].parentNode.parentNode;
+                const form = getParentForm(confirmItemEditButtons[i]);
                 const url = 'http://localhost:8998' + new URL(form.action).pathname;
                 const data = new URLSearchParams();
 
@@ -70,13 +71,12 @@ function prepareConfirmItemEditButtons() {
 
                 fetch(url, {
                     method: 'PUT',
-                    redirect: 'follow',
                     body: data
                 }).then(response => {
-                    console.log(response.status);
                     if (response.status >= 200 && response.status < 400) {
                         // TODO: Confirm message
-                        form.oldValue = form.value;
+                        const input = form.getElementsByClassName('editable_input')[0];
+                        input.oldValue = input.value;
                         toggleEdit(e.target);
                     } else {
                         // TODO: Make error message nicer
@@ -95,20 +95,42 @@ function prepareDeleteItemButtons() {
     for (let i in deleteItemButtons) {
         if (deleteItemButtons.hasOwnProperty(i)) {
             // TODO: Send value (item id) from hidden input to server with DELETE request
+            deleteItemButtons[i].addEventListener('click', e => {
+                e.preventDefault();
+
+                const form = getParentForm(deleteItemButtons[i]);
+                const url = 'http://localhost:8998' + new URL(form.action).pathname;
+                const data = new URLSearchParams();
+
+                for (const elem of form.elements) {
+                    data.append(elem.name, elem.value);
+                }
+
+                fetch(url, {
+                    method: 'DELETE',
+                    body: data
+                }).then(response => {
+                    if (response.status >= 200 && response.status < 400) {
+                        // TODO: Confirm message
+                        const listItem = form.parentNode;
+                        listItem.remove();
+                    } else {
+                        // TODO: Make error message nicer
+                        alert('Error deleting');
+                    }
+                });
+            });
         }
     }
 }
 
 function toggleEdit(node) {
     /* Accepts a node which must be nested within a form */
-    let form = node;
-    try {
-        while (form.tagName !== 'FORM') {
-            form = form.parentNode;
-        }
-    }
-    catch {
-        console.log('no parent form');
+    const form = getParentForm(node);
+
+    /* Error handling */
+    if (form === null) {
+        console.log('No parent form');
         return;
     }
 
@@ -138,4 +160,17 @@ function toggleEdit(node) {
     } else {
         input.oldValue = input.value;
     }
+}
+
+function getParentForm(node) {
+    try {
+        while (node.tagName !== 'FORM') {
+            node = node.parentNode;
+        }
+    }
+    catch {
+        node = null;
+    }
+
+    return node;
 }
