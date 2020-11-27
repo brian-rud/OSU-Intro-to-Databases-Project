@@ -94,7 +94,6 @@ function prepareDeleteItemButtons() {
 
     for (let i in deleteItemButtons) {
         if (deleteItemButtons.hasOwnProperty(i)) {
-            // TODO: Send value (item id) from hidden input to server with DELETE request
             deleteItemButtons[i].addEventListener('click', e => {
                 e.preventDefault();
 
