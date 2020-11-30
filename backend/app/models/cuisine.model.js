@@ -23,7 +23,7 @@ class Cuisine {
 	static fromNewCuisineDbDto(cuisineId, newCuisineDbDto) {
         return new Cuisine(
             cuisineId,
-            newCuisineDbDto.name,
+            newCuisineDbDto.name
         )
     }
 }
