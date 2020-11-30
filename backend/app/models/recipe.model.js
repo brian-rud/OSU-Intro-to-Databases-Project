@@ -19,7 +19,7 @@ class Recipe {
 			reqBody.description,
 			reqBody.cuisineId,
 			reqBody.dietId,
-			reqBody.mealId,
+			reqBody.mealId
 			);
 	}
 
@@ -31,7 +31,7 @@ class Recipe {
 			recipeDbDto.description,
 			recipeDbDto.cuisine_id,
 			recipeDbDto.diet_id,
-			recipeDbDto.meal_id,
+			recipeDbDto.meal_id
 			);
 	}
 }
