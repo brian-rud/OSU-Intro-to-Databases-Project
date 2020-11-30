@@ -37,3 +37,35 @@ exports.create = (req, res) => {
         }
     });
 };
+
+// Update a previously entered diet
+exports.updateOne = (req, res) => {
+    if (!req.body || !req.params) {
+        return res.status(400).json({ message: "Content cannot be empty!" });
+    }
+
+    // Include dietId from route in body
+    Object.assign(req.body, req.params);
+
+    Diet.updateOne(req.body, (err, data) => {
+        if (err) {
+            return res.status(500).json({ message: err.message || "Some error occurred while creating the Cuisine." });
+        }
+
+        return res.status(200).json({ data });
+    });
+};
+
+exports.deleteOne = (req, res) => {
+    if (!req.params) {
+        return res.status(400).json({ message: "Content cannot be empty!" });
+    }
+
+    Diet.deleteOne(req.params.dietId, (err, data) => {
+        if (err) {
+            return res.status(500).json({ message: err.message || "Some error occurred while creating the Cuisine." });
+        }
+
+        return res.status(200).json(data);
+    });
+};
