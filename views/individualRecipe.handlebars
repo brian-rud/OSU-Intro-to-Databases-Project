@@ -1,0 +1,132 @@
+<main class="container">
+
+    <div class="row">
+        
+        <div class="col-lg">
+            <h2>Recipe</h2>
+
+            <form action="/recipes/{{recipeId}}">
+
+                <div>
+                    <input type="text" name="name" value="{{name}}" class="editable_input" disabled>
+                
+                
+                    
+                    <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
+                    <!-- This button connects to a PUT request -->
+                    <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
+                
+                
+                
+                    <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm">
+                    <!-- This button connects to a DELETE request -->
+                    <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
+                    
+                </div>
+            
+                <div>
+                    <input type="text" name="recipe_url" value="{{recipeUrl}}" class="editable_input" disabled>
+                
+                
+                    <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
+                    <!-- This button connects to a PUT request -->
+                    <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
+                
+
+                
+                    <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm">
+                    <!-- This button connects to a DELETE request -->
+                    <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
+                </div>
+
+                <div>
+                    <input type="text" name="description" value="{{description}}" class="editable_input" disabled>
+                
+                
+                    <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
+                    <!-- This button connects to a PUT request -->
+                    <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
+                
+                
+                
+                    <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm">
+                    <!-- This button connects to a DELETE request -->
+                    <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
+                
+                </div>
+
+                <div>   
+                    <input type="text" name="serving_amount" value="{{servingAmount}}" class="editable_input" disabled>
+                
+                
+                    <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
+                    <!-- This button connects to a PUT request -->
+                    <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
+                
+                
+                
+                    <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm">
+                    <!-- This button connects to a DELETE request -->
+                    <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
+                </div>
+
+        
+            </form>
+
+
+        </div>
+
+<!--         <div class="col-lg">
+            <h2>Cuisine/Diet/Meals</h2>
+        </div> -->
+
+    </div>
+
+    <div class="row">
+        
+        <div class="col-lg">
+            <h2>Ingredients</h2>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Unit</th>
+                        <th scope="col">Modify/Delete</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {{#each recipeIngredientsArray}}
+                        <tr>
+                            <form action="/recipeIngredients/{{this.recipeId}}/{{this.ingredientId}}">
+                                <td>{{this.ingredientId}}</td>
+                                <td>{{this.ingredientName}}</td>
+                                <td><input type="number" name="quantity" value="{{this.quantity}}" class="editable_input"></td>
+                                <td><input type="text" name="unit" value="{{this.unit}}" class="editable_input"></td>
+                                <td>
+                                    <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm" class="editable_input">
+                                    <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm" class="editable_input">
+                                    <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm" class="editable_input">
+                                    <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm" class="editable_input" id="deleteRecipeIngredient">
+                                </td>
+                            </form>
+                        </tr>
+                    {{/each}}
+                </tbody>
+
+            </table>
+        </div>
+
+
+
+
+
+    </div>
+
+</main>
+
+
+

@@ -14,6 +14,7 @@ const cuisinesRouter = require('./routes/cuisines')
 const ingredientsRouter = require('./routes/ingredients')
 const mealRouter = require('./routes/meals')
 
+
 // App setup
 const app = new express()
 app.set('port', 4000)
@@ -35,6 +36,7 @@ app.use('/diets', dietsRouter)
 app.use('/cuisines', cuisinesRouter)
 app.use('/ingredients', ingredientsRouter)
 app.use('/meals', mealRouter)
+
 
 // Start the app
 app.listen(app.get('port'), () => {

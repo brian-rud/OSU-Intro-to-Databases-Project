@@ -44,6 +44,23 @@ Ingredient.fetchAll = result => {
 	})
 }
 
+Ingredient.fetchOne = (params, result) => {
+	sql.query(
+		"SELECT * FROM ingredients WHERE ingredient_id = ?",
+		[parseInt(params.ingredientId)],
+		(err, res) => {
+			
+			if (err) {
+				console.log("Error: ", err);
+				result(err, null);
+				return;
+			}
+			console.log(res)
+			result(null, res);
+		})
+}
+
+
 Ingredient.addOne = (body, result) => {
 	sql.query('INSERT INTO ingredients (name) VALUES (?)', [body.name], (err, res) => {
 		if (err) {

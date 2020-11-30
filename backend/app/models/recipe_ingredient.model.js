@@ -50,7 +50,77 @@ RecipeIngredient.fetchAll = result => {
 		result(null, recipeIngredientArray);
 
 	});
-
 }
+
+RecipeIngredient.fetchOne = (params, result) => {
+
+	sql.query(
+		"SELECT * FROM recipe_ingredients WHERE recipe_id = ?",
+		[parseInt(params.recipeId)],
+		(err, res) => {
+			
+			if (err) {
+				console.log("Error: ", err);
+				result(err, null);
+				return;
+			}
+
+			const recipeIngredientArray = [];
+			res.forEach(recipeIngredientDbDto => recipeIngredientArray.push(RecipeIngredient.fromRecipeIngredientDbDto(recipeIngredientDbDto)));
+			console.log("RecipeIngredients: ", recipeIngredientArray);
+			result(null, recipeIngredientArray);
+		})
+}
+
+RecipeIngredient.addOne = (body, result) => {
+	sql.query(
+		'INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity, unit) VALUES (?,?,?,?)', 
+		[body.recipeId, body.ingredientId, body.quantity, body.unit], 
+		(err, res) => {
+		if (err) {
+			console.log('Error: ', err)
+			result(err, null);
+			return
+		}
+
+
+		console.log('rows added: ', res.affectedRows);
+		result(null, res.affectedRows);
+	});
+}
+
+RecipeIngredient.updateOne = (body, result) => {
+	sql.query(
+		'UPDATE recipe_ingredients SET quantity=?, unit=? WHERE recipe_id=? AND ingredient_id=?', 
+		[parseInt(body.quantity),body.unit, parseInt(body.recipeId), parseInt(body.ingredientId)], 
+		(err, res) => {
+		if (err) {
+			console.log('Error: ', err)
+			result(err, null);
+			return
+		}
+
+		console.log('rows affected: ', res.affectedRows);
+		result(null, res.affectedRows);
+	});
+}
+
+RecipeIngredient.deleteOne = (body, result) => {
+	sql.query(
+		'DELETE FROM recipe_ingredients WHERE recipe_id = ? AND ingredient_id = ?', 
+		[parseInt(body.recipeId), parseInt(body.ingredientId)], 
+		(err, res) => {
+		if (err) {
+			console.log('Error: ', err)
+			result(err, null);
+			return
+		}
+
+		console.log('rows affected: ', res.affectedRows);
+		result(null, res.affectedRows);
+	});
+}
+
+
 
 module.exports = RecipeIngredient;

@@ -28,6 +28,7 @@ require('./app/routes/cuisine.routes')(app);
 require('./app/routes/recipe_cuisine.routes')(app);
 require('./app/routes/recipe_meal.routes')(app);
 require('./app/routes/meal.routes')(app);
+require('./app/routes/recipe_ingredient.routes')(app);
 
 // start server
 const PORT = process.env.PORT || 8998

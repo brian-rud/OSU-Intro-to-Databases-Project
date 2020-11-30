@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', (e) => {
     /* Prepare form buttons */
+    console.log("hi")
     prepareItemEditButtons();
     prepareCancelItemEditButtons();
     prepareConfirmItemEditButtons();
@@ -29,11 +30,14 @@ function prepareItemEditButtons() {
     const itemEditButtons = document.getElementsByClassName('item_edit');
 
     for (let i in itemEditButtons) {
+
         if (itemEditButtons.hasOwnProperty(i)) {
+            
+
             itemEditButtons[i].addEventListener('click', (e) => {
                 e.preventDefault();
-
-                toggleEdit(e.target);
+                console.log("target:", e.currentTarget);
+                toggleEdit(e.currentTarget);
             });
         }
     }
@@ -98,7 +102,9 @@ function prepareDeleteItemButtons() {
                 e.preventDefault();
 
                 const form = getParentForm(deleteItemButtons[i]);
+                console.log("form", form)
                 const url = 'http://localhost:8998' + new URL(form.action).pathname;
+                console.log(url)
                 const data = new URLSearchParams();
 
                 for (const elem of form.elements) {
@@ -161,11 +167,55 @@ function toggleEdit(node) {
     }
 }
 
+// function toggleEdit(node) {
+//     /* Accepts a node which must be nested within a form */
+//     const form = getParentForm(node);
+
+//     /* Error handling */
+//     if (form === null) {
+//         console.log('No parent form');
+//         return;
+//     }
+//     console.log(node.parentNode.childNodes)
+//     /* Toggle all buttons display between block and none */
+//     const buttons = {
+//         edit: node.parentNode.childNodes[3],
+//         confirm: node.parentNode.childNodes[7],
+//         cancel: node.parentNode.childNodes[9],
+//         delete: node.parentNode.childNodes[13]
+//     }
+
+//     for (let i in buttons) {
+//         if (buttons.hasOwnProperty(i)) {
+//             const display = window.getComputedStyle(buttons[i]).display;
+//             buttons[i].style.display = display === 'block' ? 'none' : 'block';
+//         }
+//     }
+
+//     /* Toggle whether the input is editable */
+//     const input = node.parentNode.childNodes[1];
+//     input.disabled = !input.disabled;
+
+//     /* Revert value if edit cancelled; otherwise save old value */
+//     if (input.disabled === true) {
+//         input.value = input.oldValue;
+//         delete input.oldValue;
+//     } else {
+//         input.oldValue = input.value;
+//     }
+// } 
+
 function getParentForm(node) {
     try {
+
+        if(node.id === "deleteRecipeIngredientButton"){
+            node = document.getElementById("recipeIngredientForm")
+        }
         while (node.tagName !== 'FORM') {
             node = node.parentNode;
+            console.log(node)
         }
+
     }
     catch {
         node = null;
