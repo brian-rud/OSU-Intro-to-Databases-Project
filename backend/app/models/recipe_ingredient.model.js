@@ -1,19 +1,15 @@
 const sql = require('./db');
 
 class RecipeIngredient{
-	constructor(recipeId, ingredientId, quantity, unit){
+	constructor(recipeId, ingredientId){
 		this.recipeId = recipeId;
 		this.ingredientId = ingredientId;
-		this.quantity = quantity;
-		this.unit = unit;
 	}
 
 	static fromReqBody(reqBody){
 		return new RecipeIngredient(
 			reqBody.recipeId,
 			reqBody.ingredientId,
-			reqBody.quantity,
-			reqBody.unit
 			);
 	}
 
@@ -21,18 +17,14 @@ class RecipeIngredient{
 		return new RecipeIngredient(
 			recipeIngredientDbDto.recipe_id,
 			recipeIngredientDbDto.ingredient_id,
-			recipeIngredientDbDto.quantity,
-			recipeIngredientDbDto.unit
 			)
 	}
 }
 
 class RecipeIngredientDbDto{
-	constructor(recipe_id, ingredient_id, quantity, unit){
+	constructor(recipe_id, ingredient_id){
 		this.recipe_id = recipe_id;
 		this.ingredient_id = ingredient_id;
-		this.quantity = quantity;
-		this.unit = unit;
 	}
 }
 
