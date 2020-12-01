@@ -6,6 +6,16 @@ const handlebars = require('express-handlebars').create({defaultLayout:'main'})
 const bodyParser = require('body-parser')
 const cors = require('cors');
 
+// add variables from .env file
+dotenv = require('dotenv');
+const result = dotenv.config()
+
+if (result.error){
+  throw result.error;
+}
+
+console.log(result.parsed);
+
 // Import routes
 const indexRouter = require('./routes/index')
 const recipesRouter = require('./routes/recipes')
@@ -16,7 +26,7 @@ const mealRouter = require('./routes/meals')
 
 // App setup
 const app = new express()
-app.set('port', 4000)
+const port = process.env.PORT || process.env.FRONTEND_PORT;
 
 // Setup rendering
 app.use(express.static('public'))
@@ -37,7 +47,7 @@ app.use('/ingredients', ingredientsRouter)
 app.use('/meals', mealRouter)
 
 // Start the app
-app.listen(app.get('port'), () => {
+app.listen(port, () => {
   console.log('App running and accessible at http://localhost:' + app.get('port'))
 })
 
