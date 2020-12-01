@@ -28,7 +28,7 @@ require('./app/routes/cuisine.routes')(app);
 require('./app/routes/meal.routes')(app);
 
 // start server
-const PORT = process.env.PORT || 8998
+const PORT = process.env.PORT || process.env.BACKEND_PORT;
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
 });

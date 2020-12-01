@@ -1,12 +1,10 @@
 const express = require('express')
 router = express.Router()
 const request = require("request")
+const ingredient_api_url = process.env.API_URL + "/ingredients";
 
 router.get('/', (req, res) => {
-
-	var ingredient_api_url = "http://localhost:8998/ingredients";
-
-	    var options = {
+	var options = {
     	method: "GET",
     	body: {},
     	json: true,
@@ -29,8 +27,6 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req,res) => {
-	
-	var ingredient_api_url = "http://localhost:8998/ingredients";
     var options = {
     	method: "POST",
     	body: {id: 0, name:req.body.add_item},

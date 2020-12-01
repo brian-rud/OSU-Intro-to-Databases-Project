@@ -1,7 +1,7 @@
 const express = require('express')
 const request = require('request');
 const router = express.Router();
-const cuisine_api_url = "http://localhost:8998/cuisines";
+const cuisine_api_url = process.env.API_URL + "/cuisines";
 
 router.get('/', (req,res) => {
     const options = {

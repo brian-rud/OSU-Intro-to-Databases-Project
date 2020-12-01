@@ -2,13 +2,12 @@ const express = require('express');
 const router = express.Router()
 const request = require('request');
 
-router.get('/', (req,res) => {
-    
-    var recipe_api_url = "http://localhost:8998/recipes";
-    var cuisine_api_url = "http://localhost:8998/cuisines";
-    var diet_api_url = "http://localhost:8998/diets";
-    var ingredient_api_url = "http://localhost:8998/ingredients";
+const recipe_api_url = process.env.API_URL + "/recipes";
+const cuisine_api_url = process.env.API_URL + "/cuisines";
+const diet_api_url = process.env.API_URL + "/diets";
+const ingredient_api_url = process.env.API_URL + "/ingredients";
 
+router.get('/', (req,res) => {
     var options = {
     	method: "GET",
     	body: {},
