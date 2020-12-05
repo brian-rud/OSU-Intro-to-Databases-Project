@@ -6,14 +6,19 @@ CREATE TABLE recipes (
 	recipe_url VARCHAR(255) NOT NULL,
 	name VARCHAR(255) NOT NULL,
 	description VARCHAR(255) NOT NULL,
-	serving_amount INT NOT NULL
+	cuisine_id INT DEFAULT NULL,
+	diet_Id INT DEFAULT NULL,
+	meal_id INT DEFAULT NULL,
+	CONSTRAINT recipe_cuisine FOREIGN KEY (cuisine_id) REFERENCES cuisines (cuisine_id) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT recipe_diet FOREIGN KEY (diet_id) REFERENCES diets (diet_id) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT recipe_meal FOREIGN KEY (meal_id) REFERENCES meals (meal_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- Insert sample recipes
-INSERT INTO recipes (recipe_url, name, description, serving_amount) VALUES
-	("https://www.schrutefarmsrecipes.com", "Beet Casserole", "Baked beetroot casserole", 6),
-	("https://www.phillyinquirer.com", "Lasagna", "Beef lasagna with tomato sauce", 8),
-	("https://www.foodnetwork.com", "Chicken Pot Pie", "Chicken pie with flaky crust", 1);
+INSERT INTO recipes (recipe_url, name, description, cuisine_id, diet_id, meal_id) VALUES
+	("https://www.schrutefarmsrecipes.com", "Beet Casserole", "Baked beetroot casserole", 2, 3, 2),
+	("https://www.phillyinquirer.com", "Lasagna", "Beef lasagna with tomato sauce", 3, 4, 3),
+	("https://www.foodnetwork.com", "Chicken Pot Pie", "Chicken pie with flaky crust", 1, 4, 3);
 
 -- Define ingredients table
 DROP TABLE IF EXISTS ingredients;
@@ -36,16 +41,17 @@ INSERT INTO ingredients (name) VALUES
 	("frozen peas"),
 	("frozen carrots");
 
-
 -- Define recipe_ingredients table
 DROP TABLE IF EXISTS recipe_ingredients;
 
 CREATE TABLE recipe_ingredients(
-	recipe_id INT NOT NULL REFERENCES recipes(recipe_id),
-	ingredient_id INT NOT NULL REFERENCES ingredients(ingredient_id),
+	recipe_id INT NOT NULL,
+	ingredient_id INT NOT NULL,
 	quantity DECIMAL NOT NULL,
 	unit VARCHAR(255) NOT NULL,
-	PRIMARY KEY (recipe_id, ingredient_id)
+	PRIMARY KEY (recipe_id, ingredient_id),
+    CONSTRAINT recipe_ingredients_fk_1 FOREIGN KEY (recipe_id) REFERENCES cs340_project_test.recipes (recipe_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT recipe_ingredients_fk_2 FOREIGN KEY (ingredient_id) REFERENCES cs340_project_test.ingredients (ingredient_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 INSERT INTO recipe_ingredients VALUES 
@@ -58,8 +64,6 @@ INSERT INTO recipe_ingredients VALUES
 	((SELECT recipe_id FROM recipes WHERE recipes.name = "Chicken Pot Pie"), (SELECT ingredient_id FROM ingredients WHERE ingredients.name = "pie crust"), 1, "package"),
 	((SELECT recipe_id FROM recipes WHERE recipes.name = "Chicken Pot Pie"), (SELECT ingredient_id FROM ingredients WHERE ingredients.name = "frozen carrots"), 8, "oz"),
 	((SELECT recipe_id FROM recipes WHERE recipes.name = "Chicken Pot Pie"), (SELECT ingredient_id FROM ingredients WHERE ingredients.name = "frozen peas"), 8, "oz");
-
-
 
 -- Define cuisines table
 DROP TABLE IF EXISTS cuisines;
@@ -74,21 +78,6 @@ INSERT INTO cuisines (name) VALUES
 	("German"),
 	("American"),
 	("Italian");
-
--- Define recipe_cuisines table
-DROP TABLE IF EXISTS recipe_cuisines;
-
-CREATE TABLE recipe_cuisines(
-	recipe_id INT NOT NULL REFERENCES recipes(recipe_id),
-	cuisine_id INT NOT NULL REFERENCES cuisines(cuisine_id),
-	PRIMARY KEY(recipe_id, cuisine_id)
-);
-
--- Insert sample values into recipe_cuisines
-INSERT into recipe_cuisines VALUES
-	((SELECT recipe_id from recipes WHERE recipes.name = "Chicken Pot Pie"), (SELECT cuisine_id from cuisines WHERE cuisines.name = "American")),
-	((SELECT recipe_id from recipes WHERE recipes.name = "Lasagna"), (SELECT cuisine_id from cuisines WHERE cuisines.name = "Italian")),
-	((SELECT recipe_id from recipes WHERE recipes.name = "Beet Casserole"), (SELECT cuisine_id from cuisines WHERE cuisines.name = "German"));
 
 -- Define diets table
 DROP TABLE IF EXISTS diets;
@@ -119,28 +108,3 @@ INSERT INTO meals (name) VALUES
     ("Lunch"),
     ("Dinner");
 
--- Define recipe_diets table
-DROP TABLE IF EXISTS recipe_diets;
-
-CREATE TABLE recipe_diets(
-	recipe_id INT NOT NULL REFERENCES recipes(recipe_id),
-	diet_id INT NOT NULL REFERENCES diets(diet_id),
-	PRIMARY KEY(recipe_id, diet_id)
-);
-
--- Insert sample values into recipe_diets
-INSERT INTO recipe_diets VALUES
-	((SELECT recipe_id FROM recipes WHERE recipes.name="Beet Casserole"), (SELECT diet_id FROM diets WHERE diets.name="Keto"));
-
--- Define recipe_meals table
-DROP TABLE IF EXISTS recipe_meals;
-
-CREATE TABLE recipe_meals(
-    recipe_id INT NOT NULL REFERENCES recipes(recipe_id),
-    meal_id INT NOT NULL references meals(meal_id),
-    PRIMARY KEY(recipe_id, meal_id)
-);
-
--- Insert sample values into recipe_meals
-INSERT INTO recipe_meals VALUES
-    ((SELECT recipe_id FROM recipes WHERE recipes.name="Beet Casserole"), (SELECT meal_id FROM meals WHERE meals.name="Breakfast"));

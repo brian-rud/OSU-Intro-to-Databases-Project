@@ -78,8 +78,53 @@ Diet.create = (newDiet, result) => {
                 result(null, newDietResult);
             });
         });
-
     });
+};
+
+Diet.updateOne = (body, result) => {
+	console.log("Update diet:", body);
+
+	sql.getConnection((err, connection) => {
+		connection.beginTransaction(err => {
+			sql.query("UPDATE diets SET name = ? WHERE diet_id = ?", [body.name, body.dietId], (err, res) => {
+				if (err) {
+					connection.rollback();
+					connection.release();
+					console.log("error:", err);
+					result(err, null);
+					return;
+				}
+
+				connection.commit();
+				connection.release();
+
+				console.log("Updated diet:", res.insertId);
+				result(null, res.insertId);
+			});
+		});
+	});
+};
+
+Diet.deleteOne = (dietId, result) => {
+	sql.getConnection((err, connection) => {
+		connection.beginTransaction(err => {
+			sql.query("DELETE FROM diets WHERE diet_id = ?", [dietId], (err, res) => {
+				if (err) {
+					connection.rollback();
+					connection.release();
+					console.log("error:", err);
+					result(err, null);
+					return;
+				}
+
+				connection.commit();
+				connection.release();
+
+				console.log("Deleted diet:", res.insertId);
+				result(null, res.insertId);
+			});
+		});
+	});
 };
 
 module.exports = Diet;

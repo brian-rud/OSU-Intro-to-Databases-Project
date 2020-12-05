@@ -1,13 +1,14 @@
 const sql = require("./db.js");
 
 class Recipe {
-	constructor(recipeId, recipeUrl, name, description, meal, servingAmount){
+	constructor(recipeId, recipeUrl, name, description, cuisineId, dietId, mealId){
 		this.recipeId = recipeId;
 		this.recipeUrl = recipeUrl;
 		this.name = name;
 		this.description = description;
-		this.meal = meal;
-		this.servingAmount = servingAmount
+		this.cuisineId = cuisineId;
+		this.dietId = dietId;
+		this.mealId = mealId;
 	}
 
 	static fromReqBody(reqBody){
@@ -16,8 +17,9 @@ class Recipe {
 			reqBody.recipeUrl,
 			reqBody.name,
 			reqBody.description,
-			reqBody.meal,
-			reqBody.servingAmount
+			reqBody.cuisineId,
+			reqBody.dietId,
+			reqBody.mealId
 			);
 	}
 
@@ -27,20 +29,22 @@ class Recipe {
 			recipeDbDto.recipe_url,
 			recipeDbDto.name,
 			recipeDbDto.description,
-			recipeDbDto.meal,
-			recipeDbDto.serving_amount
+			recipeDbDto.cuisine_id,
+			recipeDbDto.diet_id,
+			recipeDbDto.meal_id
 			);
 	}
 }
 
 class RecipeDbDto {
-	constructor(recipe_id, recipe_url, name, description, meal, serving_amount){
+	constructor(recipe_id, recipe_url, name, description, cuisineId, dietId, mealId){
 		this.recipe_id = recipe_id;
 		this.recipe_url = recipe_url;
 		this.name = name;
 		this.description = description;
-		this.meal = meal;
-		this.serving_amount = serving_amount;
+		this.cuisine_id = cuisineId;
+		this.diet_id = dietId;
+		this.meal_id = mealId;
 	}
 }
 
@@ -78,14 +82,15 @@ Recipe.fetchOne = (body, result) => {
 
 Recipe.addOne = (body, result) => {
 	sql.query(
-		"INSERT INTO recipes (recipe_url, name, description, meal, serving_amount) " +
+		"INSERT INTO recipes (recipe_url, name, description, cuisine_id, diet_id, meal_id) " +
 		"VALUES(?, ?, ?, ?, ?);",
 		[
 			body.recipeUrl,
 			body.name,
 			body.description,
-			body.meal,
-			parseInt(body.servingAmount)
+			body.cuisine_id,
+			body.diet_id,
+			body.meal_id,
 		],
 		(err, res) => {
 			if (err) {

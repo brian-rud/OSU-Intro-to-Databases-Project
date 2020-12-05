@@ -1,10 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const request = require('request');
+const diet_api_url = process.env.API_URL + "/diets";
 
 router.get('/', (req,res) => {
-    
-    var diet_api_url = "http://localhost:8998/diets";
     var options = {
     	method: "GET",
     	body: {},
@@ -28,8 +27,6 @@ router.get('/', (req,res) => {
 })
 
 router.post('/', (req,res) => {
-	
-	var diet_api_url = "http://localhost:8998/diets";
     var options = {
     	method: "POST",
     	body: {id: 0, name:req.body.add_item},

@@ -69,32 +69,6 @@ UPDATE meals SET name=$name WHERE meal_id=$meal_id;
 # Delete one
 DELETE FROM meals WHERE meal_id=$meal_id;
 
-### Recipe_Cuisines composite entity ###
-# Retrieve one
-SELECT * FROM recipe_cuisines WHERE cuisine_id=$cuisine_id AND recipe_id=$recipe_id;
-
-# Add one
-INSERT INTO recipe_cuisines (recipe_id, cuisine_id) VALUES ($recipe_id, $cuisine_Id);
-
-# Update one
-UPDATE recipe_cuisines SET recipe_id=$recipe_id WHERE cuisine_id=$cuisine_id AND recipe_id=$recipe_id;
-
-# Delete one
-DELETE FROM recipe_cuisines WHERE cuisine_id=$cuisine_id AND recipe_id=$recipe_id;
-
-### Recipe_Diets composite entity ###
-# Retrieve one
-SELECT * FROM recipe_diets WHERE recipe_id=$recipe_id AND diet_id=$diet_id;
-
-# Add one
-INSERT INTO recipe_diets (recipe_id, diet_id) VALUES ($recipe_id, $diet_id);
-
-# Update one
-UPDATE recipe_diets SET recipe_id=$recipe_id WHERE recipe_id=$recipe_id AND diet_id=$diet_id;
-
-# Delete one
-DELETE FROM recipe_diets WHERE recipe_id=$recipe_id AND diet_id=$diet_id;
-
 ### Recipe_Ingredients composite entity ###
 # Retrieve one
 SELECT * FROM recipe_ingredients WHERE recipe_id=$recipe_id AND ingredient_id=$ingredient_id;
@@ -108,15 +82,3 @@ UPDATE recipe_ingredients SET $column_name=$value WHERE recipe_id=$recipe_id AND
 # Delete one
 DELETE FROM recipe_ingredients WHERE recipe_id=$recipe_id AND ingredient_id=$ingredient_id;
 
-### Recipe_Meals composite entity ###
-# Retrieve one
-SELECT * FROM recipe_meals WHERE recipe_id=$recipe_id AND meal_id=$meal_id;
-
-# Add one
-INSERT INTO recipe_meals (recipe_id, meal_id) VALUES ($recipe_id, $meal_id);
-
-# Update one
-UPDATE recipe_meals SET recipe_id=$recipe_id WHERE recipe_id=$recipe_id AND meal_id=$meal_id;
-
-# Delete one
-DELETE FROM recipe_meals WHERE recipe_id=$recipe_id AND meal_id=$meal_id;
