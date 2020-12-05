@@ -45,4 +45,74 @@ RecipeCuisine.fetchAll = result => {
 
 }
 
+RecipeCuisine.fetchOne = (params, result) => {
+
+	sql.query(
+		"SELECT * FROM recipe_cuisines WHERE recipe_id = ?",
+		[parseInt(params.recipeId)],
+		(err, res) => {
+			
+			if (err) {
+				console.log("Error: ", err);
+				result(err, null);
+				return;
+			}
+
+			const recipeCuisineArray = [];
+			res.forEach(recipeCuisineDbDto => recipeCuisineArray.push(RecipeCuisine.fromRecipeCuisineDbDto(recipeCuisineDbDto)));
+			console.log("RecipeCuisines: ", recipeCuisineArray);
+			result(null, recipeCuisineArray);
+		})
+}
+
+RecipeCuisine.addOne = (body, result) => {
+	sql.query(
+		'INSERT INTO recipe_cuisines (recipe_id, cuisine_id) VALUES (?,?)', 
+		[body.recipeId, body.cuisineId], 
+		(err, res) => {
+		if (err) {
+			console.log('Error: ', err)
+			result(err, null);
+			return
+		}
+
+
+		console.log('rows added: ', res.affectedRows);
+		result(null, res.affectedRows);
+	});
+}
+
+// RecipeCuisine.updateOne = (body, result) => {
+// 	sql.query(
+// 		'UPDATE recipe_cuisines SET quantity=?, unit=? WHERE recipe_id=? AND cuisine_id=?', 
+// 		[parseInt(body.quantity),body.unit, parseInt(body.recipeId), parseInt(body.cuisineId)], 
+// 		(err, res) => {
+// 		if (err) {
+// 			console.log('Error: ', err)
+// 			result(err, null);
+// 			return
+// 		}
+
+// 		console.log('rows affected: ', res.affectedRows);
+// 		result(null, res.affectedRows);
+// 	});
+// }
+
+RecipeCuisine.deleteOne = (body, result) => {
+	sql.query(
+		'DELETE FROM recipe_cuisines WHERE recipe_id = ? AND cuisine_id = ?', 
+		[parseInt(body.recipeId), parseInt(body.cuisineId)], 
+		(err, res) => {
+		if (err) {
+			console.log('Error: ', err)
+			result(err, null);
+			return
+		}
+
+		console.log('rows affected: ', res.affectedRows);
+		result(null, res.affectedRows);
+	});
+}
+
+
 module.exports = RecipeCuisine;

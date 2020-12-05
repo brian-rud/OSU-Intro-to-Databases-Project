@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
     prepareCancelItemEditButtons();
     prepareConfirmItemEditButtons();
     prepareDeleteItemButtons();
+    prepareAddIngredientButton();
 
     setupFilter();
 });
@@ -32,11 +33,10 @@ function prepareItemEditButtons() {
     for (let i in itemEditButtons) {
 
         if (itemEditButtons.hasOwnProperty(i)) {
-            
+            console.log("preparededit: ", i)
 
             itemEditButtons[i].addEventListener('click', (e) => {
                 e.preventDefault();
-                console.log("target:", e.currentTarget);
                 toggleEdit(e.currentTarget);
             });
         }
@@ -66,6 +66,7 @@ function prepareConfirmItemEditButtons() {
                 e.preventDefault();
 
                 const form = getParentForm(confirmItemEditButtons[i]);
+                console.log("preoareCOnfirmEditForm: ", form)
                 const url = 'http://localhost:8998' + new URL(form.action).pathname;
                 const data = new URLSearchParams();
 
@@ -82,6 +83,7 @@ function prepareConfirmItemEditButtons() {
                         const input = form.getElementsByClassName('editable_input')[0];
                         input.oldValue = input.value;
                         toggleEdit(e.target);
+                        location.reload();
                     } else {
                         // TODO: Make error message nicer
                         toggleEdit(e.target);
@@ -129,16 +131,59 @@ function prepareDeleteItemButtons() {
     }
 }
 
+function prepareAddIngredientButton() {
+    const addIngredientButton = document.getElementById('addIngredientButton');
+    console.log(addIngredientButton)
+    if (addIngredientButton) {
+        addIngredientButton.addEventListener('click', e => {
+            
+            e.preventDefault();
+
+            const form = getParentForm(addIngredientButton);
+            const url = 'http://localhost:8998' + new URL(form.action).pathname;
+            console.log(url)
+            const data = new URLSearchParams();
+            console.log("data: ", data)
+            for (const elem of form.elements) {
+                data.append(elem.name, elem.value);
+            }
+
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(response => {
+                if (response.status >= 200 && response.status < 400) {
+                    location.reload()
+                        
+                } else {
+                    // TODO: Make error message nicer
+                    alert('Error updating');
+                }
+            });
+        });
+    }
+}
+
 function toggleEdit(node) {
     /* Accepts a node which must be nested within a form */
     const form = getParentForm(node);
+    console.log("form: ", form.id)
+    
+    if(form.id.includes("recipeAttributesForm")){
+        recipeToggleEdit(node);
+        return
+    }
 
+    if(form.id.includes("recipeIngredientForm")){
+        recipeIngredientsToggleEdit(node);
+        return
+    }
     /* Error handling */
     if (form === null) {
         console.log('No parent form');
         return;
     }
-
+    console.log("form children", form.childNodes)
     /* Toggle all buttons display between block and none */
     const buttons = {
         edit: form.getElementsByClassName('item_edit')[0],
@@ -146,6 +191,7 @@ function toggleEdit(node) {
         cancel: form.getElementsByClassName('cancel_item_edit')[0],
         delete: form.getElementsByClassName('delete_item')[0]
     }
+    console.log("buttons: ", buttons)
 
     for (let i in buttons) {
         if (buttons.hasOwnProperty(i)) {
@@ -167,53 +213,106 @@ function toggleEdit(node) {
     }
 }
 
-// function toggleEdit(node) {
-//     /* Accepts a node which must be nested within a form */
-//     const form = getParentForm(node);
+function recipeToggleEdit(node) {
+    /* Accepts a node which must be nested within a form */
+    const form = getParentForm(node);
 
-//     /* Error handling */
-//     if (form === null) {
-//         console.log('No parent form');
-//         return;
-//     }
-//     console.log(node.parentNode.childNodes)
-//     /* Toggle all buttons display between block and none */
-//     const buttons = {
-//         edit: node.parentNode.childNodes[3],
-//         confirm: node.parentNode.childNodes[7],
-//         cancel: node.parentNode.childNodes[9],
-//         delete: node.parentNode.childNodes[13]
-//     }
+    /* Error handling */
+    if (form === null) {
+        console.log('No parent form');
+        return;
+    }
+    console.log(node.parentNode.childNodes)
+    /* Toggle all buttons display between block and none */
+    const buttons = {
+        edit: node.parentNode.childNodes[3],
+        confirm: node.parentNode.childNodes[5],
+        cancel: node.parentNode.childNodes[7],
+        delete: node.parentNode.childNodes[9]
+    }
 
-//     for (let i in buttons) {
-//         if (buttons.hasOwnProperty(i)) {
-//             const display = window.getComputedStyle(buttons[i]).display;
-//             buttons[i].style.display = display === 'block' ? 'none' : 'block';
-//         }
-//     }
+    for (let i in buttons) {
+        if (buttons.hasOwnProperty(i)) {
+            const display = window.getComputedStyle(buttons[i]).display;
+            buttons[i].style.display = display === 'block' ? 'none' : 'block';
+        }
+    }
 
-//     /* Toggle whether the input is editable */
-//     const input = node.parentNode.childNodes[1];
-//     input.disabled = !input.disabled;
+    /* Toggle whether the input is editable */
+    const input = node.parentNode.childNodes[1];
+    input.disabled = !input.disabled;
 
-//     /* Revert value if edit cancelled; otherwise save old value */
-//     if (input.disabled === true) {
-//         input.value = input.oldValue;
-//         delete input.oldValue;
-//     } else {
-//         input.oldValue = input.value;
-//     }
-// } 
+    /* Revert value if edit cancelled; otherwise save old value */
+    if (input.disabled === true) {
+        input.value = input.oldValue;
+        delete input.oldValue;
+    } else {
+        input.oldValue = input.value;
+    }
+} 
+
+function recipeIngredientsToggleEdit(node){
+    /* Accepts a node which must be nested within a form */
+    const form = getParentForm(node);
+
+    var formSerial = form.id.slice(20);
+    console.log(formSerial)
+    /* Error handling */
+    if (form === null) {
+        console.log('No parent form');
+        return;
+    }
+  
+    /* Toggle all buttons display between block and none */
+    const buttons = {
+        edit: document.getElementById('modifyRecipeIngredientButton' + formSerial),
+        confirm: document.getElementById('confirmRecipeIngredientButton' + formSerial),
+        cancel: document.getElementById('cancelRecipeIngredientButton' + formSerial),
+        delete: document.getElementById('deleteRecipeIngredientButton' + formSerial)
+    }
+    console.log("buttons", buttons)
+    for (let i in buttons) {
+        if (buttons.hasOwnProperty(i)) {
+            const display = window.getComputedStyle(buttons[i]).display;
+            buttons[i].style.display = display === 'block' ? 'none' : 'block';
+        }
+    }
+
+    /* Toggle whether the input is editable */
+    const input = node.parentNode.childNodes[1];
+    input.disabled = !input.disabled;
+
+    /* Revert value if edit cancelled; otherwise save old value */
+    if (input.disabled === true) {
+        input.value = input.oldValue;
+        delete input.oldValue;
+    } else {
+        input.oldValue = input.value;
+    }
+} 
 
 function getParentForm(node) {
     try {
-
-        if(node.id === "deleteRecipeIngredientButton"){
-            node = document.getElementById("recipeIngredientForm")
+        console.log("nodeid: ", node.id)
+        // getParentForm for recipe_ingredients on the individualRecipe view
+        if(node.id.includes("deleteRecipeIngredientButton") || node.id.includes("modifyRecipeIngredientButton") 
+            ||node.id.includes("cancelRecipeIngredientButton") || node.id.includes("confirmRecipeIngredientButton")){
+            
+            var formSerial;
+            if(node.id.includes("confirm")){
+                formSerial = node.id.slice(29);
+            }
+            else formSerial = node.id.slice(28);
+           
+            node = document.getElementById("recipeIngredientForm" + formSerial);
+            return(node)
+        }
+        else if(node.id === "addIngredientButton"){
+            return(document.getElementById('addRecipeIngredientForm'));
         }
         while (node.tagName !== 'FORM') {
             node = node.parentNode;
-            console.log(node)
+            
         }
 
     }

@@ -74,8 +74,8 @@ RecipeIngredient.fetchOne = (params, result) => {
 
 RecipeIngredient.addOne = (body, result) => {
 	sql.query(
-		'INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity, unit) VALUES (?,?,?,?)', 
-		[body.recipeId, body.ingredientId, body.quantity, body.unit], 
+		'INSERT INTO recipe_ingredients (recipe_id, ingredient_id) VALUES (?,?)', 
+		[body.recipeId, body.ingredientId], 
 		(err, res) => {
 		if (err) {
 			console.log('Error: ', err)
