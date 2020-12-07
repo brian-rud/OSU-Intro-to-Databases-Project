@@ -38,7 +38,6 @@ RecipeIngredient.fetchAll = result => {
 
 		recipeIngredientArray = [];
 		res.forEach(recipeIngredientDbDto => recipeIngredientArray.push(RecipeIngredient.fromRecipeIngredientDbDto(recipeIngredientDbDto)));
-		console.log(recipeIngredientArray);
 		result(null, recipeIngredientArray);
 
 	});
@@ -50,9 +49,7 @@ RecipeIngredient.fetchAll = result => {
 RecipeIngredient.fetchOne = (params, result) => {
 
 	sql.query(
-		"SELECT * FROM recipe_ingredients WHERE recipe_id = ?",
-		[parseInt(params.recipeId)],
-		(recipeIngredientErr, recipeIngredientRes) => {
+		"SELECT * FROM recipe_ingredients WHERE recipe_id = ?", [parseInt(params.recipeId)], (recipeIngredientErr, recipeIngredientRes) => {
 			
 			if (recipeIngredientErr) {
 				console.log("Error: ", recipeIngredientErr);
@@ -62,11 +59,15 @@ RecipeIngredient.fetchOne = (params, result) => {
 
 			var recipeIngredientArray = [];
 			var count = 0;
-			console.log("RECIPEINGREDIENTRES: ", recipeIngredientRes)
+		
+			if(recipeIngredientRes.length == 0){
+				result(null, recipeIngredientArray);
+				return
+			}
+
 			recipeIngredientRes.forEach(recipeIngredientDbDto => {
 				
 				recipeIngredient = RecipeIngredient.fromRecipeIngredientDbDto(recipeIngredientDbDto)
-				console.log("recipeIngredient:", recipeIngredient)
 
 				sql.query("SELECT * FROM ingredients WHERE ingredient_id = ?", [parseInt(recipeIngredient.ingredientId)], (ingredientErr, ingredientRes) => {
 					count = count + 1;
@@ -75,10 +76,8 @@ RecipeIngredient.fetchOne = (params, result) => {
 						result(ingredientErr)
 						return
 					}
-					
-					console.log("INGREDIENTRES:", ingredientRes)
+				
 					recipeIngredient.ingredientName = ingredientRes[0].name;
-					console.log("recipeIngredientWITHNAME: ", recipeIngredient)
 					recipeIngredientArray.push({recipeId: recipeIngredient.recipeId, ingredientId: ingredientRes[0].ingredient_id, ingredientName: ingredientRes[0].name});
 
 					if (count == recipeIngredientRes.length){
@@ -92,16 +91,17 @@ RecipeIngredient.fetchOne = (params, result) => {
 }
 
 RecipeIngredient.addOne = (body, result) => {
-	sql.query(
-		'INSERT INTO recipe_ingredients (recipe_id, ingredient_id) VALUES (?,?)', 
-		[body.recipeId, body.ingredientId], 
-		(err, res) => {
+
+	if (body.recipeId.length !== undefined)
+		body.recipeId = body.recipeId[0]
+
+	sql.query('INSERT INTO recipe_ingredients (recipe_id, ingredient_id) VALUES (?,?)', [body.recipeId, body.ingredientId], (err, res) => {
+		
 		if (err) {
 			console.log('Error: ', err)
 			result(err, null);
 			return
 		}
-
 
 		console.log('rows added: ', res.affectedRows);
 		result(null, res.affectedRows);
@@ -109,10 +109,8 @@ RecipeIngredient.addOne = (body, result) => {
 }
 
 RecipeIngredient.updateOne = (body, result) => {
-	sql.query(
-		'UPDATE recipe_ingredients SET quantity=?, unit=? WHERE recipe_id=? AND ingredient_id=?', 
-		[parseInt(body.quantity),body.unit, parseInt(body.recipeId), parseInt(body.ingredientId)], 
-		(err, res) => {
+	sql.query('UPDATE recipe_ingredients SET quantity=?, unit=? WHERE recipe_id=? AND ingredient_id=?', [parseInt(body.quantity),body.unit, parseInt(body.recipeId), parseInt(body.ingredientId)], (err, res) => {
+		
 		if (err) {
 			console.log('Error: ', err)
 			result(err, null);
@@ -126,9 +124,8 @@ RecipeIngredient.updateOne = (body, result) => {
 
 RecipeIngredient.deleteOne = (body, result) => {
 	sql.query(
-		'DELETE FROM recipe_ingredients WHERE recipe_id = ? AND ingredient_id = ?', 
-		[parseInt(body.recipeId), parseInt(body.ingredientId)], 
-		(err, res) => {
+		'DELETE FROM recipe_ingredients WHERE recipe_id = ? AND ingredient_id = ?', [parseInt(body.recipeId), parseInt(body.ingredientId)], (err, res) => {
+		
 		if (err) {
 			console.log('Error: ', err)
 			result(err, null);

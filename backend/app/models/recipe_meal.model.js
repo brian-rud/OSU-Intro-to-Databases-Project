@@ -38,7 +38,6 @@ RecipeMeal.fetchAll = result => {
 
 		recipeMealArray = [];
 		res.forEach(recipeMealDbDto => recipeMealArray.push(RecipeMeal.fromRecipeMealDbDto(recipeMealDbDto)));
-		console.log(recipeMealArray);
 		result(null, recipeMealArray);
 
 	});
@@ -47,9 +46,7 @@ RecipeMeal.fetchAll = result => {
 RecipeMeal.fetchOne = (params, result) => {
 
 	sql.query(
-		"SELECT * FROM recipe_meals WHERE recipe_id = ?",
-		[parseInt(params.recipeId)],
-		(recipeMealErr, recipeMealRes) => {
+		"SELECT * FROM recipe_meals WHERE recipe_id = ?",[parseInt(params.recipeId)], (recipeMealErr, recipeMealRes) => {
 			
 			if (recipeMealErr) {
 				console.log("Error: ", recipeMealErr);
@@ -59,7 +56,6 @@ RecipeMeal.fetchOne = (params, result) => {
 
 			var recipeMealArray = [];
 			var count = 0;
-			console.log("LENGTH" ,recipeMealRes.length)
 
 			if(recipeMealRes.length == 0){
 				result(null, recipeMealArray);
@@ -67,11 +63,8 @@ RecipeMeal.fetchOne = (params, result) => {
 			}
 
 			recipeMealRes.forEach(recipeMealDbDto => {
-				console.log("INSIDE FOREACH")
 				recipeMeal = RecipeMeal.fromRecipeMealDbDto(recipeMealDbDto)
-				console.log(recipeMeal)
 				
-
 				sql.query("SELECT * FROM meals WHERE meal_id = ?", [parseInt(recipeMeal.mealId)], (mealErr, mealRes) => {
 					count = count + 1;
 					if (mealErr){
@@ -96,10 +89,8 @@ RecipeMeal.fetchOne = (params, result) => {
 		})
 }
 RecipeMeal.addOne = (body, result) => {
-	sql.query(
-		'INSERT INTO recipe_meals (recipe_id, meal_id) VALUES (?,?)', 
-		[body.recipeId, body.mealId], 
-		(err, res) => {
+	sql.query('INSERT INTO recipe_meals (recipe_id, meal_id) VALUES (?,?)', [body.recipeId, body.mealId], (err, res) => {
+		
 		if (err) {
 			console.log('Error: ', err)
 			result(err, null);
@@ -129,10 +120,10 @@ RecipeMeal.addOne = (body, result) => {
 // }
 
 RecipeMeal.deleteOne = (body, result) => {
+
 	sql.query(
-		'DELETE FROM recipe_meals WHERE recipe_id = ? AND meal_id = ?', 
-		[parseInt(body.recipeId), parseInt(body.mealId)], 
-		(err, res) => {
+		'DELETE FROM recipe_meals WHERE recipe_id = ? AND meal_id = ?', [parseInt(body.recipeId), parseInt(body.mealId)], (err, res) => {
+		
 		if (err) {
 			console.log('Error: ', err)
 			result(err, null);

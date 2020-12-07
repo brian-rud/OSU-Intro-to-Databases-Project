@@ -3,16 +3,16 @@ const router = express.Router()
 const request = require('request');
 const axios = require('axios');
 
-const recipe_api_url = "http://localhost:8998/recipes";
-const cuisine_api_url = "http://localhost:8998/cuisines";
-const diet_api_url = "http://localhost:8998/diets";
-const meal_api_url = "http://localhost:8998/meals"
-const ingredient_api_url = "http://localhost:8998/ingredients";
+const recipe_api_url = process.env.API_URL + "/recipes";
+const cuisine_api_url = process.env.API_URL + "/cuisines";
+const diet_api_url = process.env.API_URL + "/diets";
+const meal_api_url = process.env.API_URL + "/meals"
+const ingredient_api_url = process.env.API_URL + "/ingredients";
 
-const recipe_ingredients_api_url = "http://localhost:8998/recipeIngredients";
-const recipe_diets_api_url = "http://localhost:8998/recipeDiets";
-const recipe_cuisines_api_url = "http://localhost:8998/recipeCuisines";
-const recipe_meals_api_url = "http://localhost:8998/recipeMeals"
+const recipe_ingredients_api_url = process.env.API_URL + "/recipeIngredients";
+const recipe_diets_api_url = process.env.API_URL + "/recipeDiets";
+const recipe_cuisines_api_url = process.env.API_URL + "/recipeCuisines";
+const recipe_meals_api_url = process.env.API_URL + "/recipeMeals"
 
 
     
@@ -34,7 +34,6 @@ router.get('/', (req,res) => {
     	}
 
     	context.recipeArray = recipeBody;
-    	// console.log(context);
     	
     	// Get cuisines from database
     	options.url = cuisine_api_url;
@@ -46,7 +45,6 @@ router.get('/', (req,res) => {
     		}
 
     		context.cuisineArray = cuisineBody;
-    		// console.log(context);
 
     		// Get diets from database
     		options.url = diet_api_url;
@@ -58,7 +56,6 @@ router.get('/', (req,res) => {
     			}
 
     			context.dietArray = dietBody
-    			// console.log(context)
    
     		})
 
@@ -72,14 +69,13 @@ router.get('/', (req,res) => {
     			}
 
     			context.ingredientArray = ingredientBody
-    			// console.log(context)
+    			
+                context.api_url = process.env.API_URL;
     			res.render("recipes", context)
     		})
-
     		
     	})
 
-    	
     })
    
 })
@@ -88,8 +84,6 @@ router.get('/:recipeId', (req,res) => {
     
     var recipeId = req.params.recipeId;
     var context = {};
-
-
     
 axios.all([axios.get(recipe_api_url + "/" + recipeId),
            axios.get(cuisine_api_url),
@@ -120,8 +114,6 @@ axios.all([axios.get(recipe_api_url + "/" + recipeId),
         context.recipeDietsArray = recipeDietsResponse.data;
         context.recipeCuisinesArray = recipeCuisinesResponse.data;
         context.recipeMealsArray = recipeMealsResponse.data;
-
-        console.log("RECIPECUISINES", context.recipeCuisinesArray)
 
        // Render individual Recipe with context
        res.render("individualRecipe", context)

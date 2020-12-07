@@ -38,7 +38,6 @@ RecipeCuisine.fetchAll = result => {
 
 		recipeCuisineArray = [];
 		res.forEach(recipeCuisineDbDto => recipeCuisineArray.push(RecipeCuisine.fromRecipeCuisineDbDto(recipeCuisineDbDto)));
-		console.log(recipeCuisineArray);
 		result(null, recipeCuisineArray);
 
 	});
@@ -47,10 +46,7 @@ RecipeCuisine.fetchAll = result => {
 
 RecipeCuisine.fetchOne = (params, result) => {
 
-	sql.query(
-		"SELECT * FROM recipe_cuisines WHERE recipe_id = ?",
-		[parseInt(params.recipeId)],
-		(recipeCuisineErr, recipeCuisineRes) => {
+	sql.query("SELECT * FROM recipe_cuisines WHERE recipe_id = ?",[parseInt(params.recipeId)],(recipeCuisineErr, recipeCuisineRes) => {
 			
 			if (recipeCuisineErr) {
 				console.log("Error: ", recipeCuisineErr);
@@ -60,19 +56,16 @@ RecipeCuisine.fetchOne = (params, result) => {
 
 			var recipeCuisineArray = [];
 			var count = 0;
-			console.log("LENGTH" ,recipeCuisineRes.length)
-
+	
 			if(recipeCuisineRes.length == 0){
 				result(null, recipeCuisineArray);
 				return
 			}
 
 			recipeCuisineRes.forEach(recipeCuisineDbDto => {
-				console.log("INSIDE FOREACH")
+	
 				recipeCuisine = RecipeCuisine.fromRecipeCuisineDbDto(recipeCuisineDbDto)
-				console.log(recipeCuisine)
-				
-
+			
 				sql.query("SELECT * FROM cuisines WHERE cuisine_id = ?", [parseInt(recipeCuisine.cuisineId)], (cuisineErr, cuisineRes) => {
 					count = count + 1;
 					if (cuisineErr){
@@ -98,16 +91,12 @@ RecipeCuisine.fetchOne = (params, result) => {
 }
 
 RecipeCuisine.addOne = (body, result) => {
-	sql.query(
-		'INSERT INTO recipe_cuisines (recipe_id, cuisine_id) VALUES (?,?)', 
-		[body.recipeId, body.cuisineId], 
-		(err, res) => {
+	sql.query('INSERT INTO recipe_cuisines (recipe_id, cuisine_id) VALUES (?,?)', [body.recipeId, body.cuisineId], (err, res) => {
 		if (err) {
 			console.log('Error: ', err)
 			result(err, null);
 			return
 		}
-
 
 		console.log('rows added: ', res.affectedRows);
 		result(null, res.affectedRows);
@@ -131,10 +120,7 @@ RecipeCuisine.addOne = (body, result) => {
 // }
 
 RecipeCuisine.deleteOne = (body, result) => {
-	sql.query(
-		'DELETE FROM recipe_cuisines WHERE recipe_id = ? AND cuisine_id = ?', 
-		[parseInt(body.recipeId), parseInt(body.cuisineId)], 
-		(err, res) => {
+	sql.query('DELETE FROM recipe_cuisines WHERE recipe_id = ? AND cuisine_id = ?', [parseInt(body.recipeId), parseInt(body.cuisineId)], (err, res) => {
 		if (err) {
 			console.log('Error: ', err)
 			result(err, null);

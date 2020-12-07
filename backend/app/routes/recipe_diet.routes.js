@@ -14,5 +14,5 @@ module.exports = app => {
 	// app.put("/recipeDiets/:recipeId/:ingredientId", recipeDiets.updateOne);
 
 	// Delete a single recipe_ingredient
-	app.delete("/recipeDiets/:recipeId/:ingredientId", recipeDiets.deleteOne);
+	app.delete("/recipeDiets/:recipeId/:dietId", recipeDiets.deleteOne);
 }

@@ -62,7 +62,6 @@ exports.updateOne = (req, res) => {
 
 exports.deleteOne = (req, res) => {
 	Object.assign(req.body, req.params);
-	console.log(req.body)
 	RecipeIngredient.deleteOne(req.body, (err, data) => {
 		if (err) {
 			return res.status(500).json({

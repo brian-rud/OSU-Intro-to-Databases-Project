@@ -39,7 +39,6 @@ Ingredient.fetchAll = result => {
 		const ingredientArray = [];
 
 		res.forEach(ingredientDbDto => ingredientArray.push(Ingredient.fromIngredientDbDto(ingredientDbDto)));
-		console.log("ingredients: ", ingredientArray);
 		result(null, ingredientArray);
 	})
 }

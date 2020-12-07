@@ -14,7 +14,6 @@ exports.findAll = (req, res) => {
 
 exports.findOne = (req, res) => {
 	RecipeMeal.fetchOne(req.params, (err, data) => {
-		console.log("RECIPE CUISINE ROUTE WORKED")
 		if(err)
 			res.status(500).send({message: err.message || "There was an error retrieving RecipeMeals"});
 
@@ -64,7 +63,6 @@ exports.addOne = (req, res) => {
 
 exports.deleteOne = (req, res) => {
 	Object.assign(req.body, req.params);
-	console.log(req.body)
 	RecipeMeal.deleteOne(req.body, (err, data) => {
 		if (err) {
 			return res.status(500).json({

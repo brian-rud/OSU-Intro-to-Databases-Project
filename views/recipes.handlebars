@@ -1,40 +1,30 @@
 <main class="container">
 	<div class="row">
 		<h1>Add or Edit Your <em>Recipes</em></h1>
+        <h4>Add a new recipe or click on an existing recipe to add ingredients, cuisines, diets etc. to an existing recipe</h4>
+
         <div id="item_form">
             <section>
                 <h2>Edit Recipes</h2>
-                <div id="filter">
-                    <label for="filter_box">Filter:</label>
-                    <input type="text" id="filter_box">
-                </div>
-                <!-- TODO: Import Recipes from context object. -->
+
                 <ul>
                     {{#each recipeArray.data}}
-                        <li>
-                            <form action="/recipes/{{this.recipeId}}">
-                                <input type="text" name="name" value="{{this.name}}" class="editable_input" disabled>
-                                <div>
-                                    <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm">
-                                    <!-- This button connects to a PUT request -->
-                                    <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm">
-                                </div>
-                                <div>
-                                    <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm">
-                                    <!-- This button connects to a DELETE request -->
-                                    <input type="image" src="img/minus.png" class="delete_item btn btn-danger btn-sm">
-                                </div>
+                    <li>
+                        <div>
+                            <a href="/recipes/{{this.recipe_id}}">{{this.name}}</a>
+                            <form id="deleteRecipeForm" action="/recipes/{{this.recipe_id}}">
+                                <input id="deleteRecipeButton" type="image" src="../img/minus.png" class="delete_item btn btn-danger btn-sm">
                             </form>
-                        </li>
+                        </div>
+                    </li>
                     {{/each}}
           
-                   
                 </ul>
             </section>
             <section>
                 <h2>Add Recipes</h2>
                 <!-- Text box for entering the name of an ingredient -->
-                <form action="/recipes" method="POST">
+                <form action="/recipes" method="POST" id="addRecipeForm">
                 	<div class="form-group">
 	                    <label for="recipeUrl">Link:</label>
 	                    <input type="text" class="form-control" name="recipeUrl" id="recipeUrl">
@@ -47,43 +37,15 @@
 	                    <label for="description">Description:</label>
 	                    <input type="text" class="form-control" name="description" id="description">
 	                </div>
-	                <div class="form-group">    
-	                    <label for="cuisine">Cuisine:</label>
-	                    	<select class="form-control" name="cuisine" id="cuisine">
-                            {{#each cuisineArray}}
-	                    	  <option>{{this.name}}</option>
-                            {{/each}}
-	                    </select>
-	                </div>
-	                <div class="form-group">    
-	                    <label for="diet">Diet:</label>
-	                    <select class="form-control" name="diet" id="diet">
-                            {{#each dietArray}}
-                                <option>{{this.name}}</option>
-                            {{/each}}
-	                    </select>
-	                </div>
-	                <div class="form-group">    
-	                    <label for="meal">Meal:</label>
-	                    <select class="form-control" name="meal" id="meal">
-	                    	<option>Breakfast</option>
-	                    	<option>Lunch</option>
-	                    	<option>Dinner</option>
-	                    	<option>Snack</option>
-	                    	<option>Dessert</option>
-	                    </select>
-	                </div>
-                    <fieldset class="form-group checkbox-group">
-                        {{#each ingredientArray}}
-                            <div>
-                                <input type="checkbox" name="ingredients" value="chicken_breast" id="{{this.ingredientId}}">
-                                <label for="{{this.ingredientId}}">{{this.name}}</label>
-                            </div>
-                        {{/each}}
-                    </fieldset>
+                    <div class="form-group">    
+                        <label for="description">Serving Amount:</label>
+                        <input type="number" class="form-control" name="servingAmount" id="servingAmount">
+                    </div>
+
+	                
 
                     <!-- This button connects to a POST request -->
-                    <input type="image" src="img/plus.png" class="add_item btn btn-success btn-sm">
+                    <input type="image" src="../img/plus.png" class="add_item btn btn-success btn-sm" id="addRecipeButton">
                 </form>
             </section>
         </div>

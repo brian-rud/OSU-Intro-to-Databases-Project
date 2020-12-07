@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
     prepareAddCuisineButton();
     prepareAddDietButton();
     prepareAddMealButton();
+    prepareAddRecipeButton();
 
     setupFilter();
 });
@@ -107,7 +108,7 @@ function prepareDeleteItemButtons() {
                 e.preventDefault();
 
                 const form = getParentForm(deleteItemButtons[i]);
-                console.log("form", form)
+                console.log("FORM", form)
                 const url = 'http://localhost:8998' + new URL(form.action).pathname;
                 const data = new URLSearchParams();
 
@@ -134,9 +135,42 @@ function prepareDeleteItemButtons() {
     }
 }
 
+
+function prepareAddRecipeButton() {
+    const addRecipeButton = document.getElementById('addRecipeButton');
+ 
+    if (addRecipeButton) {
+       
+        addRecipeButton.addEventListener('click', e => {
+            
+            e.preventDefault();
+
+            const form = getParentForm(addRecipeButton);
+            const url = 'http://localhost:8998' + new URL(form.action).pathname;
+            const data = new URLSearchParams();
+           
+            for (const elem of form.elements) {
+                data.append(elem.name, elem.value);
+            }
+
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(response => {
+                if (response.status >= 200 && response.status < 400) {
+                    location.reload()
+                        
+                } else {
+                    // TODO: Make error message nicer
+                    alert('Error updating');
+                }
+            });
+        });
+    }
+}
 function prepareAddIngredientButton() {
     const addIngredientButton = document.getElementById('addIngredientButton');
-    console.log(addIngredientButton)
+
     if (addIngredientButton) {
         addIngredientButton.addEventListener('click', e => {
             
@@ -144,9 +178,8 @@ function prepareAddIngredientButton() {
 
             const form = getParentForm(addIngredientButton);
             const url = 'http://localhost:8998' + new URL(form.action).pathname;
-            console.log(url)
             const data = new URLSearchParams();
-            console.log("data: ", data)
+        
             for (const elem of form.elements) {
                 data.append(elem.name, elem.value);
             }
@@ -169,7 +202,7 @@ function prepareAddIngredientButton() {
 
 function prepareAddCuisineButton() {
     const addCuisineButton = document.getElementById('addCuisineButton');
-    console.log(addCuisineButton)
+    
     if (addCuisineButton) {
         addCuisineButton.addEventListener('click', e => {
             
@@ -208,9 +241,7 @@ function prepareAddDietButton() {
             e.preventDefault();
 
             const form = getParentForm(addDietButton);
-            console.log("ADDDIETFORM", form)
             const url = 'http://localhost:8998' + new URL(form.action).pathname;
-           
             const data = new URLSearchParams();
           
             for (const elem of form.elements) {
@@ -242,7 +273,6 @@ function prepareAddMealButton() {
             e.preventDefault();
 
             const form = getParentForm(addMealButton);
-            console.log("MEALFORM" , form)
             const url = 'http://localhost:8998' + new URL(form.action).pathname;
             const data = new URLSearchParams();
           
@@ -270,7 +300,6 @@ function prepareAddMealButton() {
 function toggleEdit(node) {
     /* Accepts a node which must be nested within a form */
     const form = getParentForm(node);
-    console.log("form: ", form.id)
     
     if(form.id.includes("recipeAttributesForm")){
         recipeToggleEdit(node);
@@ -286,7 +315,7 @@ function toggleEdit(node) {
         console.log('No parent form');
         return;
     }
-    console.log("form children", form.childNodes)
+
     /* Toggle all buttons display between block and none */
     const buttons = {
         edit: form.getElementsByClassName('item_edit')[0],
@@ -294,7 +323,6 @@ function toggleEdit(node) {
         cancel: form.getElementsByClassName('cancel_item_edit')[0],
         delete: form.getElementsByClassName('delete_item')[0]
     }
-    console.log("buttons: ", buttons)
 
     for (let i in buttons) {
         if (buttons.hasOwnProperty(i)) {
@@ -325,7 +353,7 @@ function recipeToggleEdit(node) {
         console.log('No parent form');
         return;
     }
-    console.log(node.parentNode.childNodes)
+
     /* Toggle all buttons display between block and none */
     const buttons = {
         edit: node.parentNode.childNodes[3],
@@ -357,9 +385,8 @@ function recipeToggleEdit(node) {
 function recipeIngredientsToggleEdit(node){
     /* Accepts a node which must be nested within a form */
     const form = getParentForm(node);
-
     var formSerial = form.id.slice(20);
-    console.log(formSerial)
+  
     /* Error handling */
     if (form === null) {
         console.log('No parent form');
@@ -373,7 +400,6 @@ function recipeIngredientsToggleEdit(node){
         cancel: document.getElementById('cancelRecipeIngredientButton' + formSerial),
         delete: document.getElementById('deleteRecipeIngredientButton' + formSerial)
     }
-    console.log("buttons", buttons)
     for (let i in buttons) {
         if (buttons.hasOwnProperty(i)) {
             const display = window.getComputedStyle(buttons[i]).display;
@@ -396,7 +422,7 @@ function recipeIngredientsToggleEdit(node){
 
 function getParentForm(node) {
     try {
-        console.log("nodeid: ", node.id)
+       
         // getParentForm for recipe_ingredients on the individualRecipe view
         if(node.id.includes("deleteRecipeIngredientButton") || node.id.includes("modifyRecipeIngredientButton") 
             ||node.id.includes("cancelRecipeIngredientButton") || node.id.includes("confirmRecipeIngredientButton")){
@@ -413,16 +439,20 @@ function getParentForm(node) {
 
         else if(node.id.includes("deleteRecipeCuisineButton")){
             var formSerial = node.id.slice(25)
-            console.log("recipeCuisinesForm" + formSerial)
             node = document.getElementById("recipeCuisinesForm" + formSerial)
             return node;
-
         }
 
         else if(node.id.includes("deleteRecipeDietButton")){
             var formSerial = node.id.slice(22)
-            console.log("DIETFORMSERIAL", formSerial)
             node = document.getElementById("recipeDietsForm" + formSerial)
+            return node;
+        }
+
+        else if(node.id.includes("deleteRecipeMealButton")){
+            var formSerial = node.id.slice(22)
+            console.log(document.getElementById("recipeMealsForm + formSerial"))
+            node = document.getElementById("recipeMealsForm" + formSerial)
             return node;
 
         }
@@ -441,8 +471,16 @@ function getParentForm(node) {
         }
 
         else if(node.id ==="addMealButton"){
-            console.log(document.getElementById('addRecipeMealForm'))
             return(document.getElementById('addRecipeMealForm'));
+        }
+
+        else if(node.id === "addRecipeButton"){
+            return(document.getElementById('addRecipeForm'));
+        }
+
+        else if(node.id === "deleteRecipeButton")
+        {
+            return(document.getElementById('deleteRecipeForm'))
         }
 
 
