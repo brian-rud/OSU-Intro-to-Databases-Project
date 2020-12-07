@@ -8,15 +8,13 @@ class Ingredient {
 
 	static fromReqBody(reqBody){
 		return new Ingredient(
-			reqBody.ingredientId,
-			reqBody.name
+			reqBody.ingredientId,reqBody.name
 			);
 	}
 
 	static fromIngredientDbDto(ingredientDbDto){
 		return new Ingredient(
-			ingredientDbDto.ingredient_id,
-			ingredientDbDto.name
+			ingredientDbDto.ingredient_id,ingredientDbDto.name
 			);
 	}
 }

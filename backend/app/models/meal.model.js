@@ -8,22 +8,19 @@ class Meal {
 
 	static fromReqBody(reqBody){
 		return new Meal(
-			reqBody.mealId,
-			reqBody.name
+			reqBody.mealId,reqBody.name
 		);
 	}
 
 	static fromMealDbDto(mealDbDto){
 		return new Meal(
-		 mealDbDto.meal_id,
-		 mealDbDto.name
+		 mealDbDto.meal_id,mealDbDto.name
 		);
 	}
 
 	static fromNewMealDbDto(mealId, newMealDbDto) {
         return new Meal(
-            mealId,
-            newMealDbDto.name
+            mealId,newMealDbDto.name
         )
     }
 }
