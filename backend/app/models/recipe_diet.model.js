@@ -49,21 +49,52 @@ RecipeDiet.fetchOne = (params, result) => {
 	sql.query(
 		"SELECT * FROM recipe_diets WHERE recipe_id = ?",
 		[parseInt(params.recipeId)],
-		(err, res) => {
+		(recipeDietErr, recipeDietRes) => {
 			
-			if (err) {
-				console.log("Error: ", err);
-				result(err, null);
+			if (recipeDietErr) {
+				console.log("Error: ", recipeDietErr);
+				result(recipeDietErr, null);
 				return;
 			}
 
-			const recipeDietArray = [];
-			res.forEach(recipeDietDbDto => recipeDietArray.push(RecipeDiet.fromRecipeDietDbDto(recipeDietDbDto)));
-			console.log("RecipeDiets: ", recipeDietArray);
-			result(null, recipeDietArray);
+			var recipeDietArray = [];
+			var count = 0;
+			console.log("LENGTH" ,recipeDietRes.length)
+
+			if(recipeDietRes.length == 0){
+				result(null, recipeDietArray);
+				return
+			}
+
+			recipeDietRes.forEach(recipeDietDbDto => {
+				console.log("INSIDE FOREACH")
+				recipeDiet = RecipeDiet.fromRecipeDietDbDto(recipeDietDbDto)
+				console.log(recipeDiet)
+				
+
+				sql.query("SELECT * FROM diets WHERE diet_id = ?", [parseInt(recipeDiet.dietId)], (dietErr, dietRes) => {
+					count = count + 1;
+					if (dietErr){
+						console.log("Error: ", dietErr)
+						result(dietErr)
+						return
+					}
+					
+					recipeDiet.dietName = dietRes[0].name;
+				
+					recipeDietArray.push({recipeId: recipeDiet.recipeId, dietId: dietRes[0].diet_id, dietName: dietRes[0].name});
+
+					if (count == recipeDietRes.length){
+						result(null, recipeDietArray);
+					}
+				})
+			
+			})
+
+
+		
 		})
 }
-
 RecipeDiet.addOne = (body, result) => {
 	sql.query(
 		'INSERT INTO recipe_diets (recipe_id, diet_id) VALUES (?,?)', 

@@ -1,5 +1,5 @@
 module.exports = app => {
-	const recipeDiets = require("../controllers/recipe_ingredient.controller")
+	const recipeDiets = require("../controllers/recipe_diet.controller")
 
 	// Retrieve all recipe_ingredients
 	app.get("/recipeDiets", recipeDiets.findAll);

@@ -139,20 +139,22 @@
                     {{#each recipeCuisinesArray}}
                         <tr>
                             <form id="recipeCuisinesForm{{this.recipeId}}_{{this.cuisineId}}" action="/recipeCuisines/{{this.recipeId}}/{{this.cuisineId}}">
-                                <td>{{this.cuisineId}}</td>
-                                <td>{{this.cuisineName}}</td>
-                                <td>
-                                    <!-- <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm" id="modifyRecipeCuisineButton{{this.recipeId}}_{{this.cuisineId}}">
-                                    <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm" id="confirmRecipeIngredientButton{{this.recipeId}}_{{this.cuisineId}}">
-                                    <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm" id="cancelRecipeCuisineButton{{this.recipeId}}_{{this.cuisineId}}"> -->
-                                    <input type="image" src="../img/minus.png" class="delete_item btn btn-danger btn-sm" id="deleteRecipeCuisineButton{{this.recipeId}}_{{this.cuisineId}}">
-                                </td>
+                            
+                            <td>{{this.cuisineId}}</td>
+                            <td>{{this.cuisineName}}</td>
+                            <td>
+                                <!-- <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm" id="modifyRecipeCuisineButton{{this.recipeId}}_{{this.cuisineId}}">
+                                <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm" id="confirmRecipeIngredientButton{{this.recipeId}}_{{this.cuisineId}}">
+                                <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm" id="cancelRecipeCuisineButton{{this.recipeId}}_{{this.cuisineId}}"> -->
+                                <input type="image" src="../img/minus.png" class="delete_item btn btn-danger btn-sm" id="deleteRecipeCuisineButton{{this.recipeId}}_{{this.cuisineId}}">
+                            </td>
                             </form>
                         </tr>
+
                     {{/each}}
 
                     <tr>
-                        <form id="addRecipeCuisineForm" action="/recipeCuisine/">
+                        <form id="addRecipeCuisineForm" action="/recipeCuisines/">
                         <input type="hidden" name="recipeId" value="{{recipeId}}">
                         <td></td>
                         
@@ -166,8 +168,120 @@
 
                         <td>
                             <input id="addCuisineButton" type="image" src="../img/checkmark.png" class="btn btn-success btn-sm">
-                        </td>   
+                        </td> 
+                        </form>  
                     </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+<div class="row">
+        
+        <div class="col-lg">
+            <h2>Diets</h2>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {{#each recipeDietsArray}}
+                        <tr>
+                            <form id="recipeDietsForm{{this.recipeId}}_{{this.dietId}}" action="/recipeDiets/{{this.recipeId}}/{{this.dietId}}">
+                                <td>{{this.dietId}}</td>
+                                <td>{{this.dietName}}</td>
+                                <td>
+                                    <!-- <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm" id="modifyRecipeDietButton{{this.recipeId}}_{{this.dietId}}">
+                                    <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm" id="confirmRecipeIngredientButton{{this.recipeId}}_{{this.dietId}}">
+                                    <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm" id="cancelRecipeDietButton{{this.recipeId}}_{{this.dietId}}"> -->
+                                    <input type="image" src="../img/minus.png" class="delete_item btn btn-danger btn-sm" id="deleteRecipeDietButton{{this.recipeId}}_{{this.dietId}}">
+                                </td>
+                            </form>
+                        </tr>
+                    {{/each}}
+
+                    <tr>
+                        <form id="addRecipeDietForm" action="/recipeDiets/">
+                        <input type="hidden" name="recipeId" value="{{recipeId}}">
+                        <td></td>
+                        
+                        <td>
+                            <select class="form-control" name="dietId">
+                                {{#each dietsArray}}
+                                  <option value="{{this.dietId}}">{{this.name}}</option>
+                                {{/each}}
+                            </select>
+                        </td>
+
+                        <td>
+                            <input id="addDietButton" type="image" src="../img/checkmark.png" class="btn btn-success btn-sm">
+                        </td>  
+                        </form> 
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+<div class="row">
+        
+        <div class="col-lg">
+            <h2>Meals</h2>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {{#each recipeMealsArray}}
+                        <tr>
+                            <form id="recipeMealsForm{{this.recipeId}}_{{this.mealId}}" action="/recipeMeals/{{this.recipeId}}/{{this.mealId}}">
+                                <td>{{this.mealId}}</td>
+                                <td>{{this.mealName}}</td>
+                                <td>
+                                    <!-- <input type="image" src="img/pencil.png" class="item_edit btn btn-primary btn-sm" id="modifyRecipeMealButton{{this.recipeId}}_{{this.mealId}}">
+                                    <input type="image" src="img/checkmark.png" class="confirm_item_edit btn btn-success btn-sm" id="confirmRecipeIngredientButton{{this.recipeId}}_{{this.mealId}}">
+                                    <input type="image" src="img/cancel.png" class="cancel_item_edit btn btn-warning btn-sm" id="cancelRecipeMealButton{{this.recipeId}}_{{this.mealId}}"> -->
+                                    <input type="image" src="../img/minus.png" class="delete_item btn btn-danger btn-sm" id="deleteRecipeMealButton{{this.recipeId}}_{{this.mealId}}">
+                                </td>
+                            </form>
+                        </tr>
+                    {{/each}}
+
+                    <tr>
+                        <form id="addRecipeMealForm" action="/recipeMeals/">
+                        <input type="hidden" name="recipeId" value="{{recipeId}}">
+                        <td></td>
+                        
+                        <td>
+                            <select class="form-control" name="mealId">
+                                {{#each mealsArray}}
+                                  <option value="{{this.mealId}}">{{this.name}}</option>
+                                {{/each}}
+                            </select>
+                        </td>
+
+                        <td>
+                            <input id="addMealButton" type="image" src="../img/checkmark.png" class="btn btn-success btn-sm">
+                        </td>   
+                    </form>
+                    </tr>
+
                 </tbody>
 
             </table>

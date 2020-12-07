@@ -6,7 +6,7 @@ const handlebars = require('express-handlebars').create({defaultLayout:'main'})
 const bodyParser = require('body-parser')
 const cors = require('cors');
 
-// add variables from .env file
+//add variables from .env file
 dotenv = require('dotenv');
 const result = dotenv.config()
 
@@ -14,7 +14,7 @@ if (result.error){
   throw result.error;
 }
 
-console.log(result.parsed);
+// console.log(result.parsed);
 
 // Import routes
 const indexRouter = require('./routes/index')

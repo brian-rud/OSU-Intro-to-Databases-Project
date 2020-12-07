@@ -14,7 +14,7 @@ const recipe_diets_api_url = "http://localhost:8998/recipeDiets";
 const recipe_cuisines_api_url = "http://localhost:8998/recipeCuisines";
 const recipe_meals_api_url = "http://localhost:8998/recipeMeals"
 
-router.get('/', (req,res) => {
+
     
 router.get('/', (req,res) => {
     var options = {
@@ -94,150 +94,40 @@ router.get('/:recipeId', (req,res) => {
 axios.all([axios.get(recipe_api_url + "/" + recipeId),
            axios.get(cuisine_api_url),
            axios.get(ingredient_api_url),
-           axios.get(recipe_ingredients_api_url + "/" + recipeId)])
-     .then(axios.spread((recipeResponse, cuisineResponse, ingredientResponse, recipeIngredientsResponse) => {  
+           axios.get(diet_api_url),
+           axios.get(meal_api_url),
+           axios.get(recipe_ingredients_api_url + "/" + recipeId),
+           axios.get(recipe_diets_api_url + "/" + recipeId),
+           axios.get(recipe_cuisines_api_url + "/" + recipeId),
+           axios.get(recipe_meals_api_url + "/" + recipeId)])
+     .then(axios.spread((recipeResponse, cuisineResponse, ingredientResponse, dietResponse, mealResponse, recipeIngredientsResponse, recipeDietsResponse, recipeCuisinesResponse, recipeMealsResponse) => {  
 
-
+        // Load reicpe data into context
         context.recipeId = recipeResponse.data.data[0].recipe_id;
         context.name = recipeResponse.data.data[0].name;
         context.recipeUrl = recipeResponse.data.data[0].recipe_url;
         context.description = recipeResponse.data.data[0].description;
         context.servingAmount = recipeResponse.data.data[0].serving_amount;
 
-    
+        // Load entity data into context
         context.cuisinesArray = cuisineResponse.data;
-
         context.ingredientsArray = ingredientResponse.data;
+        context.dietsArray = dietResponse.data;
+        context.mealsArray = mealResponse.data;
        
-        context.recipeIngredientsArray;
+        // Load relationship data into context
+        context.recipeIngredientsArray = recipeIngredientsResponse.data;
+        context.recipeDietsArray = recipeDietsResponse.data;
+        context.recipeCuisinesArray = recipeCuisinesResponse.data;
+        context.recipeMealsArray = recipeMealsResponse.data;
 
-        
+        console.log("RECIPECUISINES", context.recipeCuisinesArray)
 
-        // recipeIngredientsResponse.data.forEach(recipeIngredient => {
+       // Render individual Recipe with context
+       res.render("individualRecipe", context)
 
-        //     axios.get(ingredient_api_url + "/" + recipeIngredient.ingredientId).then(async function(ingredientResponse){
-        //         //console.log(ingredientResponse.data)
-        //         //console.log(ingredientResponse.data[0].name)
-                
-        //         var ingredientName = await ingredientResponse.data[0].name;
-                
-        //     }).catch(error=>(console.log(error)))
-
-        //     console.log(recipeIngredient)
-        //     context.recipeIngredientsArray.push(recipeIngredient);
-            
-        // })
-
-        // res.render("individualRecipe", context)
-        
-
-
-
-
-
-     }))
-     .catch(error => console.log(error));
-
+    })).catch(error => console.log(error));
 })
-        
 
-        // //Get Cuisines information
-        // options.url = cuisine_api_url;
-
-        // request(options, (cusinesErr, cusinesRes, cuisinesBody) => {
-
-        //     console.log("cuisinesBody: ", cuisinesBody);
-        //     context.cuisinesArray = cuisinesBody;
-
-        //     // Get RecipeCuisine information
-        //     options.url = recipe_cuisines_api_url;
-
-        //     request(options, (recipeCuisinesErr, recipeCuisinesRes, recipeCuisinesBody) => {
-
-        //         console.log("recipeCusinesBody: ", recipeCuisinesBody);
-        //         context.recipeCuisines = recipeCuisinesBody;
-        //         context.recipeCuisinesArray = [];
-
-        //         recipeCuisinesLength = recipeCuisinesBody.length;
-        //         console.log("recipeCuisinesLength: ", recipeCuisinesLength)
-
-        //         recipeCuisinesBody.forEach((recipeCuisine) => {
-        //             count = count + 1;
-        //             options.url = cuisine_api_url + "/" + recipeCuisine.cuisineId;
-                          
-        //             request(options, (cuisnesErr, cuisinesBodyRes, cuisinesBody) => {
-                        
-
-        //                 recipeCuisine.cuisineName = cuisinesBody[0].name;
-        //                 context.recipeCuisinesArray.push(recipeCuisine);
-        //                 console.log(recipeCuisine);
-                                
-        //                 });
-                            
-        //             })         
-                
-
-
-        //         // Get Ingredients information
-        //         options.url =  ingredient_api_url;
-
-        //         request(options, (ingredientsErr, ingredientsRes, ingredientsBody) => {
-
-        //             context.ingredientsArray = ingredientsBody;
-        //             console.log("ingredientsArray: " , context.ingredientsArray);
-                    
-                    
-
-        //             // Get RecipeIngredients information
-        //             options.url = recipe_ingredients_api_url + "/" + recipeId;
-                    
-        //             request(options, (recipeIngredientsErr, recipeIngredientsRes, recipeIngredientsBody) => {
-        //                 context.recipeIngredients = recipeIngredientsBody;
-        //                 //console.log("recipeIngredientsBody:" , recipeIngredientsBody)
-
-        //                 context.recipeIngredientsArray = [];
-        //                 recipeIngredientsLength = recipeIngredientsBody.length;
-        //                 console.log("recipeIngredientsLenght: ", recipeIngredientsLength)
-
-        //                 // Get Ingredient Names
-                        
-
-        //                 recipeIngredientsBody.forEach((recipeIngredient) => {
-
-        //                     options.url = ingredient_api_url + "/" + recipeIngredient.ingredientId;
-                          
-        //                     request(options, (ingredientsErr, ingredientsBodyRes, ingredientsBody) => {
-        //                         count = count + 1;;
-        //                         recipeIngredient.ingredientName = ingredientsBody[0].name;
-        //                         context.recipeIngredientsArray.push(recipeIngredient);
-                                
-        //                     });
-                            
-        //                 })
-                       
-   
-
-                        
-        //             });
-        //         });
-        //     });
-        // });
-    
-        //              while (count != recipeIngredientsLength + recipeCuisinesLength){
-        //                 console.log(count)
-        //              }
-        //              res.render("individualRecipe", context)
-        //              // for(let i=0; i<1; i++){
-        //              //        setTimeout(() => {
-        //              //            if(i == 5)
-        //              //                console.log("i is 5")
-        //              //                res.render("individualRecipe", context)
-        //              //        }, 6000)
-        //              //    }
-
-                
-    
-        
-// });
 
 module.exports = router

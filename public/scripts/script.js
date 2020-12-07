@@ -5,7 +5,11 @@ document.addEventListener('DOMContentLoaded', (e) => {
     prepareCancelItemEditButtons();
     prepareConfirmItemEditButtons();
     prepareDeleteItemButtons();
+    
     prepareAddIngredientButton();
+    prepareAddCuisineButton();
+    prepareAddDietButton();
+    prepareAddMealButton();
 
     setupFilter();
 });
@@ -66,7 +70,6 @@ function prepareConfirmItemEditButtons() {
                 e.preventDefault();
 
                 const form = getParentForm(confirmItemEditButtons[i]);
-                console.log("preoareCOnfirmEditForm: ", form)
                 const url = 'http://localhost:8998' + new URL(form.action).pathname;
                 const data = new URLSearchParams();
 
@@ -106,7 +109,6 @@ function prepareDeleteItemButtons() {
                 const form = getParentForm(deleteItemButtons[i]);
                 console.log("form", form)
                 const url = 'http://localhost:8998' + new URL(form.action).pathname;
-                console.log(url)
                 const data = new URLSearchParams();
 
                 for (const elem of form.elements) {
@@ -121,6 +123,7 @@ function prepareDeleteItemButtons() {
                         // TODO: Confirm message
                         const listItem = form.parentNode;
                         listItem.remove();
+                        location.reload()
                     } else {
                         // TODO: Make error message nicer
                         alert('Error deleting');
@@ -163,6 +166,106 @@ function prepareAddIngredientButton() {
         });
     }
 }
+
+function prepareAddCuisineButton() {
+    const addCuisineButton = document.getElementById('addCuisineButton');
+    console.log(addCuisineButton)
+    if (addCuisineButton) {
+        addCuisineButton.addEventListener('click', e => {
+            
+            e.preventDefault();
+
+            const form = getParentForm(addCuisineButton);
+            const url = 'http://localhost:8998' + new URL(form.action).pathname;
+            const data = new URLSearchParams();
+    
+            for (const elem of form.elements) {
+                data.append(elem.name, elem.value);
+            }
+        
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(response => {
+                if (response.status >= 200 && response.status < 400) {
+                    location.reload()
+                        
+                } else {
+                    // TODO: Make error message nicer
+                    alert('Error updating');
+                }
+            });
+        });
+    }
+}
+
+function prepareAddDietButton() {
+    const addDietButton = document.getElementById('addDietButton');
+   
+    if (addDietButton) {
+        addDietButton.addEventListener('click', e => {
+            
+            e.preventDefault();
+
+            const form = getParentForm(addDietButton);
+            console.log("ADDDIETFORM", form)
+            const url = 'http://localhost:8998' + new URL(form.action).pathname;
+           
+            const data = new URLSearchParams();
+          
+            for (const elem of form.elements) {
+                data.append(elem.name, elem.value);
+            }
+          
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(response => {
+                if (response.status >= 200 && response.status < 400) {
+                    location.reload()
+                        
+                } else {
+                    // TODO: Make error message nicer
+                    alert('Error updating');
+                }
+            });
+        });
+    }
+}
+
+function prepareAddMealButton() {
+    const addMealButton = document.getElementById('addMealButton');
+   
+    if (addMealButton) {
+        addMealButton.addEventListener('click', e => {
+            
+            e.preventDefault();
+
+            const form = getParentForm(addMealButton);
+            console.log("MEALFORM" , form)
+            const url = 'http://localhost:8998' + new URL(form.action).pathname;
+            const data = new URLSearchParams();
+          
+            for (const elem of form.elements) {
+                data.append(elem.name, elem.value);
+            }
+          
+            fetch(url, {
+                method: 'POST',
+                body: data
+            }).then(response => {
+                if (response.status >= 200 && response.status < 400) {
+                    location.reload()
+                        
+                } else {
+                    // TODO: Make error message nicer
+                    alert('Error updating');
+                }
+            });
+        });
+    }
+}
+
 
 function toggleEdit(node) {
     /* Accepts a node which must be nested within a form */
@@ -307,9 +410,42 @@ function getParentForm(node) {
             node = document.getElementById("recipeIngredientForm" + formSerial);
             return(node)
         }
+
+        else if(node.id.includes("deleteRecipeCuisineButton")){
+            var formSerial = node.id.slice(25)
+            console.log("recipeCuisinesForm" + formSerial)
+            node = document.getElementById("recipeCuisinesForm" + formSerial)
+            return node;
+
+        }
+
+        else if(node.id.includes("deleteRecipeDietButton")){
+            var formSerial = node.id.slice(22)
+            console.log("DIETFORMSERIAL", formSerial)
+            node = document.getElementById("recipeDietsForm" + formSerial)
+            return node;
+
+        }
+
         else if(node.id === "addIngredientButton"){
             return(document.getElementById('addRecipeIngredientForm'));
         }
+
+        else if(node.id === "addCuisineButton"){
+            return(document.getElementById('addRecipeCuisineForm'));
+
+        }
+
+        else if(node.id ==="addDietButton"){
+            return(document.getElementById('addRecipeDietForm'));
+        }
+
+        else if(node.id ==="addMealButton"){
+            console.log(document.getElementById('addRecipeMealForm'))
+            return(document.getElementById('addRecipeMealForm'));
+        }
+
+
         while (node.tagName !== 'FORM') {
             node = node.parentNode;
             

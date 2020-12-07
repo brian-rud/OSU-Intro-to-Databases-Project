@@ -42,25 +42,52 @@ RecipeIngredient.fetchAll = result => {
 		result(null, recipeIngredientArray);
 
 	});
+
 }
+
+
 
 RecipeIngredient.fetchOne = (params, result) => {
 
 	sql.query(
 		"SELECT * FROM recipe_ingredients WHERE recipe_id = ?",
 		[parseInt(params.recipeId)],
-		(err, res) => {
+		(recipeIngredientErr, recipeIngredientRes) => {
 			
-			if (err) {
-				console.log("Error: ", err);
-				result(err, null);
+			if (recipeIngredientErr) {
+				console.log("Error: ", recipeIngredientErr);
+				result(recipeIngredientErr, null);
 				return;
 			}
 
-			const recipeIngredientArray = [];
-			res.forEach(recipeIngredientDbDto => recipeIngredientArray.push(RecipeIngredient.fromRecipeIngredientDbDto(recipeIngredientDbDto)));
-			console.log("RecipeIngredients: ", recipeIngredientArray);
-			result(null, recipeIngredientArray);
+			var recipeIngredientArray = [];
+			var count = 0;
+			console.log("RECIPEINGREDIENTRES: ", recipeIngredientRes)
+			recipeIngredientRes.forEach(recipeIngredientDbDto => {
+				
+				recipeIngredient = RecipeIngredient.fromRecipeIngredientDbDto(recipeIngredientDbDto)
+				console.log("recipeIngredient:", recipeIngredient)
+
+				sql.query("SELECT * FROM ingredients WHERE ingredient_id = ?", [parseInt(recipeIngredient.ingredientId)], (ingredientErr, ingredientRes) => {
+					count = count + 1;
+					if (ingredientErr){
+						console.log("Error: ", ingredientErr)
+						result(ingredientErr)
+						return
+					}
+					
+					console.log("INGREDIENTRES:", ingredientRes)
+					recipeIngredient.ingredientName = ingredientRes[0].name;
+					console.log("recipeIngredientWITHNAME: ", recipeIngredient)
+					recipeIngredientArray.push({recipeId: recipeIngredient.recipeId, ingredientId: ingredientRes[0].ingredient_id, ingredientName: ingredientRes[0].name});
+
+					if (count == recipeIngredientRes.length){
+						result(null, recipeIngredientArray);
+					}
+				})
+			
+			})
+		
 		})
 }
 

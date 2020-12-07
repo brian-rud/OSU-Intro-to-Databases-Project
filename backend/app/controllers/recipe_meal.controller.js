@@ -1,9 +1,9 @@
-const RecipeCuisine = require("../models/recipe_cuisine.model.js");
+const RecipeMeal = require("../models/recipe_meal.model.js");
 
 exports.findAll = (req, res) => {
-	RecipeCuisine.fetchAll((err, data) => {
+	RecipeMeal.fetchAll((err, data) => {
 		if(err)
-			res.status(500).send({message: err.message || "There was an error retrieving RecipeCuisines"});
+			res.status(500).send({message: err.message || "There was an error retrieving RecipeMeals"});
 
 		else{
 			res.setHeader('Content-Type', 'application/json');
@@ -13,10 +13,10 @@ exports.findAll = (req, res) => {
 }
 
 exports.findOne = (req, res) => {
-	RecipeCuisine.fetchOne(req.params, (err, data) => {
+	RecipeMeal.fetchOne(req.params, (err, data) => {
 		console.log("RECIPE CUISINE ROUTE WORKED")
 		if(err)
-			res.status(500).send({message: err.message || "There was an error retrieving RecipeCuisines"});
+			res.status(500).send({message: err.message || "There was an error retrieving RecipeMeals"});
 
 		else{
 
@@ -27,16 +27,14 @@ exports.findOne = (req, res) => {
 }
 
 exports.addOne = (req, res) => {
-	RecipeCuisine.addOne(req.body, (err, data) => {
+	RecipeMeal.addOne(req.body, (err, data) => {
 		if (err) {
-			console.log("RECIPECUISINE BODY:", req.body)
 			return res.status(500).json({
-				message: err.message || "An error occurred while adding a RecipeCuisine"
+				message: err.message || "An error occurred while adding a RecipeMeal"
 			});
 		}
 
 		else {
-			console.log("RECIPECUISINE BODY:", req.body)
 			return res.status(200).json({
 				affectedRows: data
 			})
@@ -47,10 +45,10 @@ exports.addOne = (req, res) => {
 // exports.updateOne = (req, res) => {
 // 	Object.assign(req.body, req.params);
 
-// 	RecipeCuisine.updateOne(req.body,(err, data) => {
+// 	RecipeMeal.updateOne(req.body,(err, data) => {
 // 		if (err) {
 // 			return res.status(500).json({
-// 				message: err.message || "An error occurred while updating an RecipeCuisine"
+// 				message: err.message || "An error occurred while updating an RecipeMeal"
 // 			});
 // 		}
 
@@ -67,10 +65,10 @@ exports.addOne = (req, res) => {
 exports.deleteOne = (req, res) => {
 	Object.assign(req.body, req.params);
 	console.log(req.body)
-	RecipeCuisine.deleteOne(req.body, (err, data) => {
+	RecipeMeal.deleteOne(req.body, (err, data) => {
 		if (err) {
 			return res.status(500).json({
-				message: err.message || "An error occurred while deleting a RecipeCuisine"
+				message: err.message || "An error occurred while deleting a RecipeMeal"
 			});
 		}
 
