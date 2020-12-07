@@ -102,24 +102,26 @@ Cuisine.updateOne = (body, result) => {
 	});
 };
 
-Cuisine.deleteOne = (cuisineId, result) => {
-	sql.getConnection((err, connection) => {
-		connection.beginTransaction(err => {
-			sql.query("DELETE FROM cuisines WHERE cuisine_id = ?", [cuisineId], (err, res) => {
-				if (err) {
-					connection. rollback();
-					connection.release();
-					console.log("error:", err);
-					result(err, null);
-					return;
-				}
+Cuisine.deleteOne = (body, result) => {
+	//TODO: fix frontend so form sends in the below format
+	body = {cuisineId: body};
 
-				connection.commit();
-				connection.release();
+	sql.query('DELETE FROM cuisines WHERE cuisine_id=?', [parseInt(body.cuisineId)], (cuisineErr, cuisineRes) => {
+		if (cuisineErr) {
+			console.log('Error: ', cuisineErr)
+			result(cuisineErr, null);
+			return
+		}
 
-				console.log("Deleted cuisine:", res.insertId);
-				result(null, res.insertId);
-			});
+		sql.query("DELETE FROM recipe_cuisines WHERE cuisine_id=?", [parseInt(body.cuisineId)], (recipeCuisineErr, recipeCuisineRes) => {
+			if (recipeCuisineErr) {
+				console.log('Error: ', recipeCuisineErr)
+				result(recipeCuisineErr, null);
+				return
+			}
+
+			console.log('rows affected: ', cuisineRes.affectedRows);
+			result(null, cuisineRes.affectedRows);
 		});
 	});
 }
