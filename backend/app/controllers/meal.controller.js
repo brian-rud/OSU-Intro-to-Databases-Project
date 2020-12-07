@@ -43,7 +43,6 @@ exports.updateOne = (req, res) => {
 
     // Include mealId from route in body
     Object.assign(req.body, req.params);
-    console.log(req.body);
 
     Meal.updateOne(req.body, (err, data) => {
         if (err) {

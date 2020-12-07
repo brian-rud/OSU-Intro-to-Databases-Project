@@ -4,6 +4,9 @@ module.exports = app => {
 	// Retrieve all ingredients
 	app.get("/ingredients", ingredients.findAll);
 
+	// Retrieve ingredient by ingredient_id
+	app.get("/ingredients/:ingredientId", ingredients.findOne)
+
 	// Add an ingredient
 	app.post("/ingredients", ingredients.addOne);
 

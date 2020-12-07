@@ -26,6 +26,11 @@ require('./app/routes/recipe_ingredient.routes')(app);
 require('./app/routes/diet.routes')(app);
 require('./app/routes/cuisine.routes')(app);
 require('./app/routes/meal.routes')(app);
+require('./app/routes/recipe_ingredient.routes')(app);
+require('./app/routes/recipe_diet.routes')(app);
+require('./app/routes/recipe_cuisine.routes')(app);
+require('./app/routes/recipe_meal.routes')(app);
+
 
 // start server
 const PORT = process.env.PORT || process.env.BACKEND_PORT;

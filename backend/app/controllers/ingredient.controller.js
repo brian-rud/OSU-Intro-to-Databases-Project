@@ -16,6 +16,18 @@ exports.findAll = (req, res) => {
 
 }
 
+exports.findOne = (req, res) => {
+	Ingredient.fetchOne(req.params, (err, data) => {
+		if(err)
+			res.status(500).send({message: err.message || "There was an error retrieving RecipeIngredients"});
+
+		else{
+			res.setHeader('Content-Type', 'application/json');
+			res.send(data);
+		}
+	})
+}
+
 exports.addOne = (req, res) => {
 	Ingredient.addOne(req.body, (err, data) => {
 		if (err) {
