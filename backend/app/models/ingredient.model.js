@@ -8,15 +8,13 @@ class Ingredient {
 
 	static fromReqBody(reqBody){
 		return new Ingredient(
-			reqBody.ingredientId,
-			reqBody.name
+			reqBody.ingredientId,reqBody.name
 			);
 	}
 
 	static fromIngredientDbDto(ingredientDbDto){
 		return new Ingredient(
-			ingredientDbDto.ingredient_id,
-			ingredientDbDto.name
+			ingredientDbDto.ingredient_id,ingredientDbDto.name
 			);
 	}
 }
@@ -87,15 +85,23 @@ Ingredient.updateOne = (body, result) => {
 }
 
 Ingredient.deleteOne = (body, result) => {
-	sql.query('DELETE FROM ingredients WHERE ingredient_id=?', [parseInt(body.ingredientId)], (err, res) => {
-		if (err) {
-			console.log('Error: ', err)
-			result(err, null);
+	sql.query('DELETE FROM ingredients WHERE ingredient_id=?', [parseInt(body.ingredientId)], (ingredientErr, ingredientRes) => {
+		if (ingredientErr) {
+			console.log('Error: ', ingredientErr)
+			result(ingredientErr, null);
 			return
 		}
 
-		console.log('rows affected: ', res.affectedRows);
-		result(null, res.affectedRows);
+		sql.query("DELETE FROM recipe_ingredients WHERE ingredient_id=?", [parseInt(body.ingredientId)], (recipeIngredientErr, recipeIngredientRes) => {
+			if (recipeIngredientErr) {
+				console.log('Error: ', recipeIngredientErr)
+				result(recipeIngredientErr, null);
+				return
+			}
+
+			console.log('rows affected: ', ingredientRes.affectedRows);
+			result(null, ingredientRes.affectedRows);
+		});
 	});
 }
 

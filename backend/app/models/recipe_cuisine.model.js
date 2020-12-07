@@ -9,14 +9,14 @@ class RecipeCuisine{
 	static fromReqBody(reqBody){
 		return new RecipeCuisine(
 			reqBody.recipeId,
-			reqBody.cuisineId,
+			reqBody.cuisineId
 			);
 	}
 
 	static fromRecipeCuisineDbDto(recipeCuisineDbDto){
 		return new RecipeCuisine(
 			recipeCuisineDbDto.recipe_id,
-			recipeCuisineDbDto.cuisine_id,
+			recipeCuisineDbDto.cuisine_id
 			)
 	}
 }

@@ -105,26 +105,28 @@ Diet.updateOne = (body, result) => {
 	});
 };
 
-Diet.deleteOne = (dietId, result) => {
-	sql.getConnection((err, connection) => {
-		connection.beginTransaction(err => {
-			sql.query("DELETE FROM diets WHERE diet_id = ?", [dietId], (err, res) => {
-				if (err) {
-					connection.rollback();
-					connection.release();
-					console.log("error:", err);
-					result(err, null);
-					return;
-				}
+Diet.deleteOne = (body, result) => {
+	//TODO: fix frontend so form sends in the below format
+	body = {dietId: body};
 
-				connection.commit();
-				connection.release();
+	sql.query('DELETE FROM diets WHERE diet_id=?', [parseInt(body.dietId)], (dietErr, dietRes) => {
+		if (dietErr) {
+			console.log('Error: ', dietErr)
+			result(dietErr, null);
+			return
+		}
 
-				console.log("Deleted diet:", res.insertId);
-				result(null, res.insertId);
-			});
+		sql.query("DELETE FROM recipe_diets WHERE diet_id=?", [parseInt(body.dietId)], (recipeDietErr, recipeDietRes) => {
+			if (recipeDietErr) {
+				console.log('Error: ', recipeDietErr)
+				result(recipeDietErr, null);
+				return
+			}
+
+			console.log('rows affected: ', dietRes.affectedRows);
+			result(null, dietRes.affectedRows);
 		});
 	});
-};
+}
 
 module.exports = Diet;

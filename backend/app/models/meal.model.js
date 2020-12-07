@@ -8,22 +8,19 @@ class Meal {
 
 	static fromReqBody(reqBody){
 		return new Meal(
-			reqBody.mealId,
-			reqBody.name
+			reqBody.mealId,reqBody.name
 		);
 	}
 
 	static fromMealDbDto(mealDbDto){
 		return new Meal(
-		 mealDbDto.meal_id,
-		 mealDbDto.name
+		 mealDbDto.meal_id,mealDbDto.name
 		);
 	}
 
 	static fromNewMealDbDto(mealId, newMealDbDto) {
         return new Meal(
-            mealId,
-            newMealDbDto.name
+            mealId,newMealDbDto.name
         )
     }
 }
@@ -102,24 +99,25 @@ Meal.updateOne = (body, result) => {
 	});
 };
 
-Meal.deleteOne = (mealId, result) => {
-	sql.getConnection((err, connection) => {
-		connection.beginTransaction(err => {
-			sql.query("DELETE FROM meals WHERE meal_id = ?", [mealId], (err, res) => {
-				if (err) {
-					connection. rollback();
-					connection.release();
-					console.log("error:", err);
-					result(err, null);
-					return;
-				}
+Meal.deleteOne = (body, result) => {
+	//TODO: fix frontend so form sends in the below format
+	body = {mealId: body};
+	sql.query('DELETE FROM meals WHERE meal_id=?', [parseInt(body.mealId)], (mealErr, mealRes) => {
+		if (mealErr) {
+			console.log('Error: ', mealErr)
+			result(mealErr, null);
+			return
+		}
 
-				connection.commit();
-				connection.release();
+		sql.query("DELETE FROM recipe_meals WHERE meal_id=?", [parseInt(body.mealId)], (recipeMealErr, recipeMealRes) => {
+			if (recipeMealErr) {
+				console.log('Error: ', recipeMealErr)
+				result(recipeMealErr, null);
+				return
+			}
 
-				console.log("Deleted meal:", res.insertId);
-				result(null, res.insertId);
-			});
+			console.log('rows affected: ', mealRes.affectedRows);
+			result(null, mealRes.affectedRows);
 		});
 	});
 }
