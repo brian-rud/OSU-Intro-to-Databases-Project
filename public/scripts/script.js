@@ -353,13 +353,13 @@ function recipeToggleEdit(node) {
         console.log('No parent form');
         return;
     }
-
+    console.log(node.parentNode.childNodes)
     /* Toggle all buttons display between block and none */
     const buttons = {
-        edit: node.parentNode.childNodes[3],
-        confirm: node.parentNode.childNodes[5],
-        cancel: node.parentNode.childNodes[7],
-        delete: node.parentNode.childNodes[9]
+        edit: node.parentNode.childNodes[5],
+        confirm: node.parentNode.childNodes[7],
+        cancel: node.parentNode.childNodes[9],
+        delete: node.parentNode.childNodes[11]
     }
 
     for (let i in buttons) {
@@ -370,7 +370,7 @@ function recipeToggleEdit(node) {
     }
 
     /* Toggle whether the input is editable */
-    const input = node.parentNode.childNodes[1];
+    const input = node.parentNode.childNodes[3];
     input.disabled = !input.disabled;
 
     /* Revert value if edit cancelled; otherwise save old value */
